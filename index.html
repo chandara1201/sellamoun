@@ -179,7 +179,7 @@
         <!-- TAB 1: DASHBOARD -->
         <section id="tab-dashboard" class="tab-content active space-y-6">
             
-            <!-- Filter Bar for Dashboard (Chosse Month or Week) -->
+            <!-- Filter Bar for Dashboard -->
             <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-filter"></i></span>
@@ -195,7 +195,6 @@
                         <option value="month">ខែជាក់លាក់ (Specific Month)</option>
                     </select>
                     
-                    <!-- Dynamic Input based on selection -->
                     <div id="dashboard-filter-value-container" class="hidden">
                         <input type="week" id="dashboard-week-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
                         <input type="month" id="dashboard-month-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
@@ -290,7 +289,7 @@
                 </div>
             </div>
 
-            <!-- Added: បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង -->
+            <!-- បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង -->
             <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
                     <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-list-check"></i></span>
@@ -725,7 +724,7 @@
                     <h4 id="modal-staff-orders-count" class="text-lg sm:text-xl font-black text-slate-900 mt-1">0 ដង</h4>
                 </div>
                 <div class="bg-blue-50/70 p-4 rounded-2xl border border-blue-100">
-                    <p class="text-xs text-blue-600 font-medium">ទំនិញលក់ได้សរុប</p>
+                    <p class="text-xs text-blue-600 font-medium">ទំនិញលក់បានសរុប</p>
                     <h4 id="modal-staff-units-count" class="text-lg sm:text-xl font-black text-blue-950 mt-1">0 ឯកតា</h4>
                 </div>
                 <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100">
@@ -983,7 +982,6 @@
             if (activeTab === 'settings') updateUIMode();
         }
 
-        // Functions for Dashboard Filter (Choose Month or Week)
         function onDashboardFilterTypeChange() {
             let type = document.getElementById('dashboard-filter-type').value;
             let container = document.getElementById('dashboard-filter-value-container');
@@ -1019,7 +1017,6 @@
             if (type === 'week') {
                 let weekVal = document.getElementById('dashboard-week-input').value;
                 if (!weekVal) return orders;
-                // weekVal format e.g. "2026-W33"
                 let [yearStr, weekStr] = weekVal.split('-W');
                 let year = parseInt(yearStr);
                 let week = parseInt(weekStr);
@@ -1030,7 +1027,6 @@
                     let oYear = orderDate.getFullYear();
                     if (oYear !== year) return false;
                     
-                    // calculate week number of orderDate
                     let d = new Date(Date.UTC(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()));
                     let dayNum = d.getUTCDay() || 7;
                     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
@@ -1077,7 +1073,6 @@
                 });
             }
 
-            // Render Dashboard Orders Table (បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង)
             let dashboardOrdersTbody = document.getElementById('dashboard-orders-tbody');
             dashboardOrdersTbody.innerHTML = '';
             if (filteredOrders.length === 0) {
@@ -1775,110 +1770,95 @@
             document.getElementById('cancel-edit-staff-btn').classList.add('hidden');
         }
 
+        function deleteStaff(staffName) {
+            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីលុបបុគ្គលិក!', 'error'); return; }
+            if (confirm(`តើអ្នកពិតជាចង់លុបបុគ្គលិក "${staffName}" មែនទេ?`)) {
+                staffList = staffList.filter(s => s !== staffName);
+                saveData();
+                renderStaffChips();
+                renderStaffPerformance();
+                showAlert('បានលុបបុគ្គលិកជោគជ័យ!');
+            }
+        }
+
         function renderStaffChips() {
             let container = document.getElementById('staff-chips-container');
             container.innerHTML = '';
             if (staffList.length === 0) {
-                container.innerHTML = '<p class="text-xs sm:text-sm text-slate-400">មិនទាន់មានបុគ្គលិក.</p>';
+                container.innerHTML = '<span class="text-xs text-slate-400 italic">មិនទាន់មានបុគ្គលិក</span>';
                 return;
             }
             let admin = isAdminMode();
             staffList.forEach(st => {
                 let adminActions = admin ? `
-                    <button type="button" onclick="editStaff('${st}')" class="text-brand-600 hover:text-brand-800 ml-1.5 p-1 rounded hover:bg-brand-100/50 transition" title="កែប្រែ"><i class="fa-solid fa-pen"></i></button>
-                    <button type="button" onclick="deleteStaff('${st}')" class="text-rose-500 hover:text-rose-700 ml-0.5 p-1 rounded hover:bg-rose-100/50 transition" title="លុប"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="editStaff('${st}')" class="text-brand-600 hover:text-brand-800 ml-1.5 transition" title="កែប្រែ"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                    <button onclick="deleteStaff('${st}')" class="text-rose-500 hover:text-rose-700 ml-1 transition" title="លុប"><i class="fa-solid fa-xmark text-xs"></i></button>
                 ` : '';
                 container.innerHTML += `
-                    <div class="inline-flex items-center space-x-2 bg-brand-50/80 border border-brand-200/60 px-3.5 py-2 rounded-2xl text-slate-900 font-semibold text-xs sm:text-sm shadow-sm transition hover:shadow">
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-id-badge text-brand-600"></i> ${st}</span>
-                        <button type="button" onclick="viewStaffDetails('${st}')" class="text-brand-600 hover:text-brand-800 ml-1 p-1 rounded hover:bg-brand-100/50 transition" title="មើល"><i class="fa-solid fa-eye"></i></button>
+                    <div class="inline-flex items-center bg-brand-50/80 text-brand-900 border border-brand-100 px-3 py-1.5 rounded-2xl text-xs sm:text-sm font-semibold shadow-sm">
+                        <i class="fa-solid fa-user-circle mr-1.5 text-brand-600"></i> ${st}
                         ${adminActions}
                     </div>
                 `;
             });
         }
 
-        function deleteStaff(staffName) {
-            if (!isAdminMode()) return;
-            if (confirm(`តើអ្នកពិតជាចង់លុបបុគ្គលិក "${staffName}" មែនទេ?`)) {
-                staffList = staffList.filter(s => s !== staffName);
-                saveData();
-                renderStaffChips();
-                renderStaffPerformance();
-                showAlert('បានលុบบុគ្គលិកជោគជ័យ!');
-            }
-        }
-
         function renderStaffPerformance() {
+            let stats = calculateStaffStats();
             let tbody = document.getElementById('staff-performance-tbody');
             tbody.innerHTML = '';
-            let stats = calculateStaffStats();
-
             if (stats.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-400">មិនទាន់មានទិន្នន័យបុគ្គលិក</td></tr>';
                 return;
             }
-
             stats.forEach((st, idx) => {
-                let levelBadge = '';
-                if (idx === 0) levelBadge = '<span class="px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-xs font-bold inline-flex items-center gap-1"><i class="fa-solid fa-crown text-amber-500"></i> ខ្លាំងជាងគេ</span>';
-                else if (idx === 1) levelBadge = '<span class="px-3 py-1 bg-blue-50 text-blue-800 rounded-full text-xs font-bold inline-flex items-center gap-1"><i class="fa-solid fa-star text-blue-500"></i> ល្អប្រសើរ</span>';
-                else levelBadge = '<span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold">ធម្មតា</span>';
-
-                let admin = isAdminMode();
-                let actionsHtml = admin ? `
-                    <button onclick="editStaff('${st.name}')" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition" title="កែប្រែ"><i class="fa-solid fa-pen"></i></button>
-                    <button onclick="deleteStaff('${st.name}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition" title="លុប"><i class="fa-solid fa-trash"></i></button>
-                ` : '-';
+                let rankBadge = idx === 0 ? '<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-bold text-xs"><i class="fa-solid fa-crown text-amber-500 mr-1"></i> លេខ ១</span>' : (idx === 1 ? '<span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-full font-bold text-xs">លេខ ២</span>' : (idx === 2 ? '<span class="px-2.5 py-1 bg-orange-50 text-orange-800 rounded-full font-bold text-xs">លេខ ៣</span>' : `<span class="text-slate-500 font-semibold text-xs">លេខ ${idx + 1}</span>`));
+                
+                let gradeBadge = '';
+                if (st.totalRevenue >= 500) gradeBadge = '<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold">🌟 ឆ្នើមខ្លាំង</span>';
+                else if (st.totalRevenue >= 200) gradeBadge = '<span class="px-2 py-0.5 bg-brand-50 text-brand-700 rounded-lg text-xs font-bold">👍 ល្អប្រសើរ</span>';
+                else gradeBadge = '<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold">ធម្មតា</span>';
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                        <td class="p-3.5 font-bold text-slate-700">#${idx + 1}</td>
-                        <td class="p-3.5 font-semibold text-slate-900">${st.name}</td>
-                        <td class="p-3.5 text-slate-600">${st.orderCount} ដង</td>
-                        <td class="p-3.5 text-slate-600">${st.totalUnits} ឯកតា</td>
-                        <td class="p-3.5 font-bold text-emerald-600">$${st.totalRevenue.toFixed(2)}</td>
-                        <td class="p-3.5 text-center">${levelBadge}</td>
-                        <td class="p-3.5 text-center space-x-1">
-                            <button onclick="viewStaffDetails('${st.name}')" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition" title="មើលលម្អិត"><i class="fa-solid fa-eye"></i></button>
-                            ${admin ? actionsHtml : ''}
+                        <td class="p-3.5">${rankBadge}</td>
+                        <td class="p-3.5 font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-user-tie text-brand-500"></i> ${st.name}</td>
+                        <td class="p-3.5 text-slate-600 font-semibold">${st.orderCount} ដង</td>
+                        <td class="p-3.5 text-slate-600 font-semibold">${st.totalUnits} ឯកតា</td>
+                        <td class="p-3.5 font-black text-brand-600">$${st.totalRevenue.toFixed(2)}</td>
+                        <td class="p-3.5 text-center">${gradeBadge}</td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="openStaffDetailModal('${st.name}')" class="px-3 py-1.5 bg-brand-50 text-brand-600 hover:bg-brand-100 rounded-xl text-xs font-bold transition shadow-sm"><i class="fa-solid fa-eye mr-1"></i> មើលលម្អិត</button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function viewStaffDetails(staffName) {
-            let staffOrders = orders.filter(o => o.staff === staffName);
-            let totalOrders = staffOrders.length;
+        function openStaffDetailModal(staffName) {
+            let stOrders = orders.filter(o => o.staff === staffName);
+            let totalRev = stOrders.reduce((sum, o) => sum + o.total, 0);
             let totalUnits = 0;
-            let totalRev = 0;
-
-            staffOrders.forEach(o => {
-                totalRev += o.total;
-                o.items.forEach(i => { totalUnits += i.qty; });
-            });
+            stOrders.forEach(o => o.items.forEach(i => totalUnits += i.qty));
 
             document.getElementById('modal-staff-name').textContent = staffName;
-            document.getElementById('modal-staff-orders-count').textContent = totalOrders + ' ដង';
+            document.getElementById('modal-staff-orders-count').textContent = stOrders.length + ' ដង';
             document.getElementById('modal-staff-units-count').textContent = totalUnits + ' ឯកតា';
             document.getElementById('modal-staff-revenue').textContent = '$' + totalRev.toFixed(2);
 
             let tbody = document.getElementById('modal-staff-orders-tbody');
             tbody.innerHTML = '';
-            if (staffOrders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400 text-xs">មិនទាន់មានប្រវត្តិនៃការលក់</td></tr>';
+            if (stOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">បុគ្គលិកនេះមិនទាន់មានប្រវត្តិនៃការលក់ទេ។</td></tr>';
             } else {
-                [...staffOrders].reverse().forEach(o => {
+                [...stOrders].reverse().forEach(o => {
                     let itemsStr = o.items.map(i => `${i.name} (x${i.qty})`).join(', ');
-                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' 
-                        ? '<span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold">បង់រួច</span>' 
-                        : '<span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 rounded-full text-[10px] font-semibold">មិនទាន់</span>';
+                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' ? '<span class="text-emerald-600 font-bold">បង់រួច</span>' : '<span class="text-rose-600 font-bold">មិនទាន់</span>';
                     tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition text-xs">
+                        <tr class="hover:bg-slate-50/50 text-xs">
                             <td class="p-3 text-slate-500">${o.date || '-'}</td>
                             <td class="p-3 font-semibold text-slate-800">${o.customer}</td>
-                            <td class="p-3 text-slate-600">${itemsStr}</td>
+                            <td class="p-3 text-slate-600 truncate max-w-[150px]">${itemsStr}</td>
                             <td class="p-3 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
                             <td class="p-3">${statusBadge}</td>
                         </tr>
@@ -1892,10 +1872,39 @@
             document.getElementById('staff-detail-modal').classList.add('hidden');
         }
 
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', async () => {
             loadThemeSetting();
-            loadDataFromJsonFile();
-        };
+            await loadDataFromJsonFile();
+            if (staffList.length === 0 && inventory.length === 0 && orders.length === 0) {
+                staffList = ['សុខ ចាន់ឌី', 'ហុង វិសាល', 'គឹម សុភា'];
+                inventory = [
+                    { id: 1, name: 'iPhone 15 Pro Max', retailPrice: 1200, wholesalePrice: 1100, stock: 15 },
+                    { id: 2, name: 'Samsung Galaxy S24 Ultra', retailPrice: 1100, wholesalePrice: 1000, stock: 10 },
+                    { id: 3, name: 'AirPods Pro 2', retailPrice: 250, wholesalePrice: 220, stock: 30 }
+                ];
+                orders = [
+                    {
+                        id: 'ORD-1001',
+                        date: '2026-08-10 10:30',
+                        staff: 'សុខ ចាន់ឌី',
+                        customer: 'លោក ដារ៉ា',
+                        items: [{ name: 'iPhone 15 Pro Max', qty: 1, price: 1200, priceType: 'retailPrice' }],
+                        total: 1200,
+                        paymentStatus: 'បង់លុយរួច',
+                        paymentMethod: 'សាច់ប្រាក់ផ្ទាល់',
+                        receiptData: null
+                    }
+                ];
+                saveDataToLocalStorage();
+            }
+            renderStaffChips();
+            renderStaffPerformance();
+            renderInventoryTable();
+            renderOrdersTable();
+            renderDashboard();
+            renderAnalyticsCharts();
+            updateUIMode();
+        });
     </script>
 </body>
 </html>
