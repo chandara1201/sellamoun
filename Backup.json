@@ -1,0 +1,37 @@
+{
+  "inventory": [
+    {
+      "id": 1786789321276,
+      "name": "នីតា Foam Premium",
+      "retailPrice": 6,
+      "wholesalePrice": 0,
+      "stock": 100
+    },
+    {
+      "id": 1786789382724,
+      "name": "នីតា ម៉ាស់ម៉ាចឆា",
+      "retailPrice": 5,
+      "wholesalePrice": 3.5,
+      "stock": 0
+    },
+    {
+      "id": 1786789467604,
+      "name": "នីតា ស្រ្កាប់កាហ្វេ",
+      "retailPrice": 5,
+      "wholesalePrice": 3.5,
+      "stock": 100
+    },
+    {
+      "id": 1786789494236,
+      "name": "Colognes Soap",
+      "retailPrice": 7,
+      "wholesalePrice": 3.5,
+      "stock": 100
+    }
+  ],
+  "staff": [
+    "Lonh Sreymai",
+    "Nai Admin"
+  ],
+  "orders": []
+}
