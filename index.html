@@ -179,7 +179,7 @@
         <!-- TAB 1: DASHBOARD -->
         <section id="tab-dashboard" class="tab-content active space-y-6">
             
-            <!-- Filter Bar for Dashboard -->
+            <!-- Filter Bar for Dashboard (Chosse Month or Week) -->
             <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-filter"></i></span>
@@ -195,6 +195,7 @@
                         <option value="month">ខែជាក់លាក់ (Specific Month)</option>
                     </select>
                     
+                    <!-- Dynamic Input based on selection -->
                     <div id="dashboard-filter-value-container" class="hidden">
                         <input type="week" id="dashboard-week-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
                         <input type="month" id="dashboard-month-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
@@ -289,7 +290,7 @@
                 </div>
             </div>
 
-            <!-- All Orders List in Dashboard -->
+            <!-- Added: បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង -->
             <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
                     <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-list-check"></i></span>
@@ -724,7 +725,7 @@
                     <h4 id="modal-staff-orders-count" class="text-lg sm:text-xl font-black text-slate-900 mt-1">0 ដង</h4>
                 </div>
                 <div class="bg-blue-50/70 p-4 rounded-2xl border border-blue-100">
-                    <p class="text-xs text-blue-600 font-medium">ទំនិញលក់បានសរុប</p>
+                    <p class="text-xs text-blue-600 font-medium">ទំនិញលក់ได้សរុប</p>
                     <h4 id="modal-staff-units-count" class="text-lg sm:text-xl font-black text-blue-950 mt-1">0 ឯកតា</h4>
                 </div>
                 <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100">
@@ -891,6 +892,7 @@
                 orders = data.orders || [];
                 saveDataToLocalStorage();
                 refreshActiveTab();
+                showAlert('បានទាញយកទិន្នន័យពី backup.json ដោយជោគជ័យ!');
             } catch (error) {
                 inventory = JSON.parse(localStorage.getItem('sys_inventory')) || [];
                 staffList = JSON.parse(localStorage.getItem('sys_staff')) || [];
@@ -981,6 +983,7 @@
             if (activeTab === 'settings') updateUIMode();
         }
 
+        // Functions for Dashboard Filter (Choose Month or Week)
         function onDashboardFilterTypeChange() {
             let type = document.getElementById('dashboard-filter-type').value;
             let container = document.getElementById('dashboard-filter-value-container');
@@ -1016,6 +1019,7 @@
             if (type === 'week') {
                 let weekVal = document.getElementById('dashboard-week-input').value;
                 if (!weekVal) return orders;
+                // weekVal format e.g. "2026-W33"
                 let [yearStr, weekStr] = weekVal.split('-W');
                 let year = parseInt(yearStr);
                 let week = parseInt(weekStr);
@@ -1026,6 +1030,7 @@
                     let oYear = orderDate.getFullYear();
                     if (oYear !== year) return false;
                     
+                    // calculate week number of orderDate
                     let d = new Date(Date.UTC(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()));
                     let dayNum = d.getUTCDay() || 7;
                     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
@@ -1072,6 +1077,7 @@
                 });
             }
 
+            // Render Dashboard Orders Table (បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង)
             let dashboardOrdersTbody = document.getElementById('dashboard-orders-tbody');
             dashboardOrdersTbody.innerHTML = '';
             if (filteredOrders.length === 0) {
@@ -1769,6 +1775,29 @@
             document.getElementById('cancel-edit-staff-btn').classList.add('hidden');
         }
 
+        function renderStaffChips() {
+            let container = document.getElementById('staff-chips-container');
+            container.innerHTML = '';
+            if (staffList.length === 0) {
+                container.innerHTML = '<p class="text-xs sm:text-sm text-slate-400">មិនទាន់មានបុគ្គលិក.</p>';
+                return;
+            }
+            let admin = isAdminMode();
+            staffList.forEach(st => {
+                let adminActions = admin ? `
+                    <button type="button" onclick="editStaff('${st}')" class="text-brand-600 hover:text-brand-800 ml-1.5 p-1 rounded hover:bg-brand-100/50 transition" title="កែប្រែ"><i class="fa-solid fa-pen"></i></button>
+                    <button type="button" onclick="deleteStaff('${st}')" class="text-rose-500 hover:text-rose-700 ml-0.5 p-1 rounded hover:bg-rose-100/50 transition" title="លុប"><i class="fa-solid fa-xmark"></i></button>
+                ` : '';
+                container.innerHTML += `
+                    <div class="inline-flex items-center space-x-2 bg-brand-50/80 border border-brand-200/60 px-3.5 py-2 rounded-2xl text-slate-900 font-semibold text-xs sm:text-sm shadow-sm transition hover:shadow">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-id-badge text-brand-600"></i> ${st}</span>
+                        <button type="button" onclick="viewStaffDetails('${st}')" class="text-brand-600 hover:text-brand-800 ml-1 p-1 rounded hover:bg-brand-100/50 transition" title="មើល"><i class="fa-solid fa-eye"></i></button>
+                        ${adminActions}
+                    </div>
+                `;
+            });
+        }
+
         function deleteStaff(staffName) {
             if (!isAdminMode()) return;
             if (confirm(`តើអ្នកពិតជាចង់លុបបុគ្គលិក "${staffName}" មែនទេ?`)) {
@@ -1776,79 +1805,82 @@
                 saveData();
                 renderStaffChips();
                 renderStaffPerformance();
-                showAlert('បានលុបបុគ្គលិកជោគជ័យ!');
+                showAlert('បានលុบบុគ្គលិកជោគជ័យ!');
             }
-        }
-
-        function renderStaffChips() {
-            let container = document.getElementById('staff-chips-container');
-            container.innerHTML = '';
-            staffList.forEach(st => {
-                container.innerHTML += `
-                    <div class="inline-flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 border border-slate-200">
-                        <span>${st}</span>
-                        <button onclick="editStaff('${st}')" class="text-brand-600 hover:text-brand-800"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteStaff('${st}')" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-            });
         }
 
         function renderStaffPerformance() {
             let tbody = document.getElementById('staff-performance-tbody');
             tbody.innerHTML = '';
             let stats = calculateStaffStats();
-            if (stats.length === 0 || stats.every(s => s.totalRevenue === 0 && s.orderCount === 0)) {
+
+            if (stats.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-400">មិនទាន់មានទិន្នន័យបុគ្គលិក</td></tr>';
                 return;
             }
-            stats.forEach((s, idx) => {
-                let badgeColor = idx === 0 ? 'bg-amber-100 text-amber-800' : (idx === 1 ? 'bg-slate-200 text-slate-800' : 'bg-orange-100 text-orange-800');
-                let rankDisplay = idx < 3 ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold ${badgeColor}">ចំណាត់ថ្នាក់ទី ${idx + 1}</span>` : `<span class="text-slate-500 text-xs font-semibold">ទី ${idx + 1}</span>`;
-                let levelBadge = s.totalRevenue > 500 ? '<span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold">VIP 🌟</span>' : '<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold">Standard</span>';
+
+            stats.forEach((st, idx) => {
+                let levelBadge = '';
+                if (idx === 0) levelBadge = '<span class="px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-xs font-bold inline-flex items-center gap-1"><i class="fa-solid fa-crown text-amber-500"></i> ខ្លាំងជាងគេ</span>';
+                else if (idx === 1) levelBadge = '<span class="px-3 py-1 bg-blue-50 text-blue-800 rounded-full text-xs font-bold inline-flex items-center gap-1"><i class="fa-solid fa-star text-blue-500"></i> ល្អប្រសើរ</span>';
+                else levelBadge = '<span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold">ធម្មតា</span>';
+
+                let admin = isAdminMode();
+                let actionsHtml = admin ? `
+                    <button onclick="editStaff('${st.name}')" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition" title="កែប្រែ"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="deleteStaff('${st.name}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition" title="លុប"><i class="fa-solid fa-trash"></i></button>
+                ` : '-';
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                        <td class="p-3.5">${rankDisplay}</td>
-                        <td class="p-3.5 font-bold text-slate-800">${s.name}</td>
-                        <td class="p-3.5 text-slate-600">${s.orderCount} ដង</td>
-                        <td class="p-3.5 text-slate-600">${s.totalUnits} ឯកតា</td>
-                        <td class="p-3.5 font-bold text-brand-600">$${s.totalRevenue.toFixed(2)}</td>
+                        <td class="p-3.5 font-bold text-slate-700">#${idx + 1}</td>
+                        <td class="p-3.5 font-semibold text-slate-900">${st.name}</td>
+                        <td class="p-3.5 text-slate-600">${st.orderCount} ដង</td>
+                        <td class="p-3.5 text-slate-600">${st.totalUnits} ឯកតា</td>
+                        <td class="p-3.5 font-bold text-emerald-600">$${st.totalRevenue.toFixed(2)}</td>
                         <td class="p-3.5 text-center">${levelBadge}</td>
-                        <td class="p-3.5 text-center">
-                            <button onclick="viewStaffDetail('${s.name}')" class="px-3 py-1.5 bg-brand-50 text-brand-600 font-semibold rounded-xl hover:bg-brand-100 transition text-xs">មើលលម្អិត</button>
+                        <td class="p-3.5 text-center space-x-1">
+                            <button onclick="viewStaffDetails('${st.name}')" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition" title="មើលលម្អិត"><i class="fa-solid fa-eye"></i></button>
+                            ${admin ? actionsHtml : ''}
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function viewStaffDetail(staffName) {
-            document.getElementById('modal-staff-name').textContent = staffName;
+        function viewStaffDetails(staffName) {
             let staffOrders = orders.filter(o => o.staff === staffName);
-            let totalRev = staffOrders.reduce((sum, o) => sum + o.total, 0);
+            let totalOrders = staffOrders.length;
             let totalUnits = 0;
-            staffOrders.forEach(o => { o.items.forEach(i => totalUnits += i.qty); });
+            let totalRev = 0;
 
-            document.getElementById('modal-staff-orders-count').textContent = staffOrders.length + ' ដង';
+            staffOrders.forEach(o => {
+                totalRev += o.total;
+                o.items.forEach(i => { totalUnits += i.qty; });
+            });
+
+            document.getElementById('modal-staff-name').textContent = staffName;
+            document.getElementById('modal-staff-orders-count').textContent = totalOrders + ' ដង';
             document.getElementById('modal-staff-units-count').textContent = totalUnits + ' ឯកតា';
             document.getElementById('modal-staff-revenue').textContent = '$' + totalRev.toFixed(2);
 
             let tbody = document.getElementById('modal-staff-orders-tbody');
             tbody.innerHTML = '';
             if (staffOrders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">គ្មានប្រវត្តិនៃការលក់</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400 text-xs">មិនទាន់មានប្រវត្តិនៃការលក់</td></tr>';
             } else {
-                staffOrders.forEach(o => {
+                [...staffOrders].reverse().forEach(o => {
                     let itemsStr = o.items.map(i => `${i.name} (x${i.qty})`).join(', ');
-                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' ? '<span class="text-emerald-600 font-semibold">បង់រួច</span>' : '<span class="text-rose-600 font-semibold">មិនទាន់</span>';
+                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' 
+                        ? '<span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold">បង់រួច</span>' 
+                        : '<span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 rounded-full text-[10px] font-semibold">មិនទាន់</span>';
                     tbody.innerHTML += `
-                        <tr class="text-xs">
-                            <td class="p-2.5 text-slate-500">${o.date || '-'}</td>
-                            <td class="p-2.5 font-semibold">${o.customer}</td>
-                            <td class="p-2.5 text-slate-600 truncate max-w-[150px]">${itemsStr}</td>
-                            <td class="p-2.5 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
-                            <td class="p-2.5">${statusBadge}</td>
+                        <tr class="hover:bg-slate-50 transition text-xs">
+                            <td class="p-3 text-slate-500">${o.date || '-'}</td>
+                            <td class="p-3 font-semibold text-slate-800">${o.customer}</td>
+                            <td class="p-3 text-slate-600">${itemsStr}</td>
+                            <td class="p-3 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
+                            <td class="p-3">${statusBadge}</td>
                         </tr>
                     `;
                 });
@@ -1860,36 +1892,9 @@
             document.getElementById('staff-detail-modal').classList.add('hidden');
         }
 
-        // Auto-sync / polling mechanism for backup.json
-        let lastBackupDataString = '';
-        async function autoSyncBackupJson() {
-            try {
-                const response = await fetch('./backup.json?_=' + new Date().getTime());
-                if (response.ok) {
-                    const textData = await response.text();
-                    if (textData !== lastBackupDataString) {
-                        lastBackupDataString = textData;
-                        const data = JSON.parse(textData);
-                        inventory = data.inventory || [];
-                        staffList = data.staff || [];
-                        orders = data.orders || [];
-                        saveDataToLocalStorage();
-                        refreshActiveTab();
-                    }
-                }
-            } catch (e) {
-                // Ignore background fetch errors
-            }
-        }
-
-        window.onload = async function() {
+        window.onload = function() {
             loadThemeSetting();
-            await loadDataFromJsonFile();
-            if (orders.length > 0 || inventory.length > 0) {
-                lastBackupDataString = JSON.stringify({ inventory, staff: staffList, orders });
-            }
-            // Start auto-sync interval (checks backup.json every 3 seconds)
-            setInterval(autoSyncBackupJson, 3000);
+            loadDataFromJsonFile();
         };
     </script>
 </body>
