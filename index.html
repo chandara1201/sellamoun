@@ -1,1910 +1,581 @@
 <!DOCTYPE html>
-<html lang="km" data-theme="indigo">
+<html lang="km" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ប្រព័ន្ធគ្រប់គ្រងការលក់ និងស្តុកទំនិញ (Analytics, Staff & Settings)</title>
-    <!-- Tailwind CSS -->
+    <title>ប្រព័ន្ធគ្រប់គ្រង និងស្រង់សកម្មភាពបុគ្គលិកប្រូម៉ូត</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js for Data Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Font: Hanuman / Kantumruy Pro for Khmer -->
-    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Font Khmer -->
+    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        brand: {
-                            50: 'var(--color-brand-50)',
-                            100: 'var(--color-brand-100)',
-                            500: 'var(--color-brand-500)',
-                            600: 'var(--color-brand-600)',
-                            700: 'var(--color-brand-700)',
-                            900: 'var(--color-brand-900)',
-                            950: 'var(--color-brand-950)',
-                        }
+                    fontFamily: {
+                        sans: ['"Kantumruy Pro"', '"Battambang"', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Theme Variables */
-        :root {
-            --color-brand-50: #eef2ff;
-            --color-brand-100: #e0e7ff;
-            --color-brand-500: #6366f1;
-            --color-brand-600: #4f46e5;
-            --color-brand-700: #4338ca;
-            --color-brand-900: #312e81;
-            --color-brand-950: #1e1b4b;
-        }
-        [data-theme="emerald"] {
-            --color-brand-50: #ecfdf5;
-            --color-brand-100: #d1fae5;
-            --color-brand-500: #10b981;
-            --color-brand-600: #059669;
-            --color-brand-700: #047857;
-            --color-brand-900: #064e3b;
-            --color-brand-950: #022c22;
-        }
-        [data-theme="amber"] {
-            --color-brand-50: #fffbeb;
-            --color-brand-100: #fef3c7;
-            --color-brand-500: #f59e0b;
-            --color-brand-600: #d97706;
-            --color-brand-700: #b45309;
-            --color-brand-900: #78350f;
-            --color-brand-950: #451a03;
-        }
-        [data-theme="rose"] {
-            --color-brand-50: #fff1f2;
-            --color-brand-100: #ffe4e6;
-            --color-brand-500: #f43f5e;
-            --color-brand-600: #e11d48;
-            --color-brand-700: #be123c;
-            --color-brand-900: #881337;
-            --color-brand-950: #4c0519;
-        }
-
         body {
-            font-family: 'Kantumruy Pro', 'Hanuman', sans-serif;
-            background-color: #f8fafc;
-        }
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
         }
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 9999px;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased">
 
-    <!-- Header / Navbar -->
-    <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-slate-900 text-white shadow-xl sticky top-0 z-40 backdrop-blur-md bg-opacity-95 border-b border-brand-800/40">
-        <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <!-- Logo & Title -->
-            <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-tr from-brand-600 to-violet-600 p-3 rounded-2xl shadow-lg ring-1 ring-white/20 flex items-center justify-center">
-                    <i class="fa-solid fa-chart-line text-xl text-amber-300 drop-shadow"></i>
+    <header class="bg-indigo-700 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm border border-white/20">
+                    <i data-lucide="video" class="w-8 h-8 text-indigo-100"></i>
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
-                        គ្រប់គ្រងការលក់ និងស្តុក
-                        <span class="text-[10px] bg-brand-500/30 text-brand-200 border border-brand-400/30 px-2.5 py-0.5 rounded-full font-normal hidden sm:inline-block">Pro v3.1</span>
-                    </h1>
-                    <p class="text-[11px] text-brand-300/80 hidden sm:block font-light">ប្រព័ន្ធវិភាគទិន្នន័យ គ្រប់គ្រងបុគ្គលិក និងកំណត់រចនាសម្ព័ន្ធកម្រិតខ្ពស់</p>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">ប្រព័ន្ធស្រង់វីដេអូ និងរូបថតបុគ្គលិកប្រូម៉ូត</h1>
+                    <p class="text-xs sm:text-sm text-indigo-200">Promo Staff Media Activity Logger & Management (JSON-Synced)</p>
                 </div>
             </div>
             
-            <!-- Controls & Auth Switch Button -->
-            <div class="flex items-center space-x-2.5">
-                <!-- Theme Customizer Selector -->
-                <div class="relative hidden sm:block">
-                    <select id="theme-selector" onchange="changeTheme(this.value)" class="bg-brand-900/80 text-brand-200 text-xs sm:text-sm border border-brand-700/50 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400 cursor-pointer shadow-sm">
-                        <option value="indigo">🌌 ពណ៌ខៀវទឹកមុជ (Indigo)</option>
-                        <option value="emerald">🌿 ពណ៌បៃតង (Emerald)</option>
-                        <option value="amber">🔥 ពណ៌ទឹកក្រូច (Amber)</option>
-                        <option value="rose">🌸 ពណ៌ផ្កាឈូក (Rose)</option>
-                    </select>
-                </div>
-
-                <!-- Auth Switch Button -->
-                <div id="auth-control-container">
-                    <button id="auth-btn" onclick="handleAuthAction()" class="px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md flex items-center space-x-1.5 border border-brand-400/30">
-                        <i class="fa-solid fa-user-shield text-brand-200"></i> <span id="auth-btn-text">Admin</span>
-                    </button>
-                </div>
-
-                <!-- Mobile Hamburger Menu Button -->
-                <button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="md:hidden p-2.5 rounded-xl bg-brand-900/80 text-brand-200 hover:text-white transition border border-brand-700/50 shadow-sm">
-                    <i class="fa-solid fa-bars text-lg"></i>
+            <nav class="flex bg-indigo-800/80 p-1.5 rounded-xl border border-indigo-600/50 shadow-inner overflow-x-auto max-w-full">
+                <button onclick="switchTab('logs')" id="tab-btn-logs" class="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-indigo-700 shadow-sm whitespace-nowrap">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                    <span>ស្រង់សកម្មភាព & ប្រវត្តិ</span>
                 </button>
-            </div>
+                <button onclick="switchTab('individual')" id="tab-btn-individual" class="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all text-indigo-100 hover:text-white hover:bg-indigo-700/50 whitespace-nowrap">
+                    <i data-lucide="user-search" class="w-4 h-4"></i>
+                    <span>ពិនិត្យបុគ្គលិកម្នាក់ៗ</span>
+                </button>
+                <button onclick="switchTab('staff')" id="tab-btn-staff" class="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all text-indigo-100 hover:text-white hover:bg-indigo-700/50 whitespace-nowrap">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>គ្រប់គ្រងបុគ្គលិក</span>
+                </button>
+                <button onclick="switchTab('backup')" id="tab-btn-backup" class="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all text-indigo-100 hover:text-white hover:bg-indigo-700/50 whitespace-nowrap">
+                    <i data-lucide="database" class="w-4 h-4"></i>
+                    <span>ទិន្នន័យ (Backup Info)</span>
+                </button>
+            </nav>
         </div>
-
-        <!-- Navigation Tabs -->
-        <nav id="navbar-menu" class="hidden md:flex bg-brand-950/95 px-4 py-3 border-t border-brand-900/50 backdrop-blur-md shadow-inner">
-            <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row flex-wrap gap-2 justify-between items-stretch md:items-center">
-                <div class="flex flex-col md:flex-row flex-wrap gap-2 w-full md:w-auto">
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-2.5 rounded-xl bg-brand-700 text-white font-semibold text-sm transition-all flex items-center space-x-2.5 shadow-md">
-                        <i class="fa-solid fa-house-chimney text-amber-300"></i> <span>ផ្ទាំងគ្រប់គ្រង</span>
-                    </button>
-                    <button onclick="switchTab('analytics')" id="btn-analytics" class="px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white flex items-center space-x-2.5">
-                        <i class="fa-solid fa-chart-pie text-emerald-400"></i> <span>ការវិភាគទិន្នន័យ</span>
-                    </button>
-                    <button onclick="switchTab('orders')" id="btn-orders" class="px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white items-center space-x-2.5 admin-only hidden">
-                        <i class="fa-solid fa-cart-shopping text-cyan-400"></i> <span>បញ្ជាទិញ (Order)</span>
-                    </button>
-                    <button onclick="switchTab('inventory')" id="btn-inventory" class="px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white flex items-center space-x-2.5">
-                        <i class="fa-solid fa-boxes-stacked text-amber-400"></i> <span>ស្តុកទំនិញ</span>
-                    </button>
-                    <button onclick="switchTab('staff')" id="btn-staff" class="px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white flex items-center space-x-2.5">
-                        <i class="fa-solid fa-user-group text-purple-400"></i> <span>បុគ្គលិក និងលទ្ធផល</span>
-                    </button>
-                    <button onclick="switchTab('settings')" id="btn-settings" class="px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white flex items-center space-x-2.5">
-                        <i class="fa-solid fa-gears text-rose-300"></i> <span>ការកំណត់ (Settings)</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
     </header>
 
-    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-6 space-y-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 overflow-y-auto">
 
-        <!-- TAB 1: DASHBOARD -->
-        <section id="tab-dashboard" class="tab-content active space-y-6">
-            
-            <!-- Filter Bar for Dashboard -->
-            <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center space-x-3 w-full sm:w-auto">
-                    <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-filter"></i></span>
+        <!-- ================= 1. ACTIVITY LOGS TAB ================= -->
+        <section id="tab-logs" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
                     <div>
-                        <h3 class="font-bold text-slate-900 text-sm sm:text-base">តម្រងផ្ទាំងគ្រប់គ្រង</h3>
-                        <p class="text-xs text-slate-500">ជ្រើសរើសខែ ឬសប្តាហ៍ជាក់លាក់ដើម្បីមើលទិន្នន័យ</p>
+                        <h2 class="text-lg font-bold text-slate-900">ទម្រង់ស្រង់សកម្មភាពបុគ្គលិកថ្មី</h2>
+                        <p class="text-sm text-slate-500">ទិន្នន័យត្រូវបានអាននិងកត់ត្រាផ្ទាល់ពី backup.json</p>
                     </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                    <select id="dashboard-filter-type" onchange="onDashboardFilterTypeChange()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm cursor-pointer">
-                        <option value="all">រាល់ទិន្នន័យទាំងអស់ (All Time)</option>
-                        <option value="week">សប្តាហ៍ជាក់លាក់ (Specific Week)</option>
-                        <option value="month">ខែជាក់លាក់ (Specific Month)</option>
-                    </select>
-                    
-                    <div id="dashboard-filter-value-container" class="hidden">
-                        <input type="week" id="dashboard-week-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
-                        <input type="month" id="dashboard-month-input" onchange="renderDashboard()" class="px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm hidden">
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition-shadow group">
-                    <div class="space-y-1">
-                        <p class="text-xs sm:text-sm text-slate-500 font-medium">ចំណូលសរុប</p>
-                        <h3 id="stat-total-revenue" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">$0.00</h3>
-                    </div>
-                    <div class="bg-brand-50 p-3.5 rounded-2xl text-brand-600 group-hover:scale-110 transition-transform shadow-inner flex items-center justify-center">
-                        <i class="fa-solid fa-wallet text-xl"></i>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition-shadow group">
-                    <div class="space-y-1">
-                        <p class="text-xs sm:text-sm text-slate-500 font-medium">ការបញ្ជាទិញ</p>
-                        <h3 id="stat-total-orders" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">0</h3>
-                    </div>
-                    <div class="bg-blue-50 p-3.5 rounded-2xl text-blue-600 group-hover:scale-110 transition-transform shadow-inner flex items-center justify-center">
-                        <i class="fa-solid fa-receipt text-xl"></i>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition-shadow group">
-                    <div class="space-y-1">
-                        <p class="text-xs sm:text-sm text-slate-500 font-medium">ទំនិញក្នុងស្តុក</p>
-                        <h3 id="stat-total-stock" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">0</h3>
-                    </div>
-                    <div class="bg-emerald-50 p-3.5 rounded-2xl text-emerald-600 group-hover:scale-110 transition-transform shadow-inner flex items-center justify-center">
-                        <i class="fa-solid fa-box-open text-xl"></i>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition-shadow group">
-                    <div class="space-y-1">
-                        <p class="text-xs sm:text-sm text-slate-500 font-medium">បុគ្គលិកសរុប</p>
-                        <h3 id="stat-total-staff" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">0</h3>
-                    </div>
-                    <div class="bg-amber-50 p-3.5 rounded-2xl text-amber-600 group-hover:scale-110 transition-transform shadow-inner flex items-center justify-center">
-                        <i class="fa-solid fa-id-badge text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Rankings Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Weekly Ranking Card -->
-                <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-100">
-                    <div class="flex justify-between items-center mb-5">
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2.5">
-                            <span class="bg-amber-100 text-amber-700 p-2 rounded-xl text-sm"><i class="fa-solid fa-medal"></i></span>
-                            <span>ចំណាត់ថ្នាក់ប្រចាំសប្តាហ៍</span>
-                        </h2>
-                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">សប្តាហ៍នេះ</span>
-                    </div>
-                    <div id="weekly-ranking-container" class="space-y-3"></div>
+                    <button onclick="openAddLogModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm hover:shadow transition-all flex items-center space-x-2 rtl:space-x-reverse">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        <span>បង្កើតកំណត់ត្រាថ្មី</span>
+                    </button>
                 </div>
 
-                <!-- Monthly Ranking Card -->
-                <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-100">
-                    <div class="flex justify-between items-center mb-5">
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2.5">
-                            <span class="bg-brand-100 text-brand-700 p-2 rounded-xl text-sm"><i class="fa-solid fa-trophy"></i></span>
-                            <span>ចំណាត់ថ្នាក់ប្រចាំខែ</span>
-                        </h2>
-                        <span id="current-month-label" class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">ខែនេះ</span>
-                    </div>
-                    <div id="monthly-ranking-container" class="space-y-3"></div>
-                </div>
-            </div>
-
-            <!-- Recent Activity Table -->
-            <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-100">
-                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
-                    <span class="bg-blue-100 text-blue-700 p-2 rounded-xl text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
-                    <span>ការបញ្ជាទិញថ្មីៗ</span>
-                </h2>
-                <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                    <table class="w-full text-left text-sm min-w-[300px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-slate-400 text-xs sm:text-sm font-medium">
-                                <th class="pb-3">អតិថិជន</th>
-                                <th class="pb-3">អ្នកលក់</th>
-                                <th class="pb-3">ទឹកប្រាក់</th>
-                                <th class="pb-3">ស្ថានភាព</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recent-orders-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- បញ្ជីការបញ្ជាទិញទាំងអស់ ទៅក្នុងផ្ទាំងគ្រប់គ្រង -->
-            <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
-                    <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-list-check"></i></span>
-                    <span>បញ្ជីការបញ្ជាទិញទាំងអស់ (ផ្ទាំងគ្រប់គ្រង)</span>
-                </h2>
-                <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                    <table class="w-full text-left text-sm min-w-[700px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50/80 text-slate-600 text-xs sm:text-sm font-semibold">
-                                <th class="p-3.5 rounded-l-2xl">កាលបរិច្ឆេទ & ម៉ោង</th>
-                                <th class="p-3.5">អតិថិជន</th>
-                                <th class="p-3.5">អ្នកលក់</th>
-                                <th class="p-3.5">ទំនិញ និងបរិមាណ</th>
-                                <th class="p-3.5">លុយសរុប</th>
-                                <th class="p-3.5">ស្ថានភាព</th>
-                                <th class="p-3.5 rounded-r-2xl">បង់ប្រាក់</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dashboard-orders-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: DATA ANALYTICS -->
-        <section id="tab-analytics" class="tab-content space-y-6">
-            <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center space-x-2.5">
-                            <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-chart-column"></i></span>
-                            <span>ផ្ទាំងវិភាគទិន្នន័យអាជីវកម្ម</span>
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">ការមើលរូបភាពក្រាហ្វិកនៃចំណូល និងផលិតផលលក់ដាច់ខ្លាំងតាមរដូវកាល</p>
-                    </div>
-                    <div class="w-full sm:w-auto">
-                        <select id="analytics-filter-period" onchange="renderAnalyticsCharts()" class="w-full sm:w-auto px-4 py-2.5 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-slate-900 shadow-sm cursor-pointer">
-                            <option value="all">រាល់ទិន្នន័យទាំងអស់ (All Time)</option>
-                            <option value="month">តាមខែបច្ចុប្បន្ន</option>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">តម្រងតាមបុគ្គលិក</label>
+                        <select id="filterStaff" onchange="renderLogs()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                            <option value="">-- បុគ្គលិកទាំងអស់ --</option>
                         </select>
                     </div>
-                </div>
-
-                <!-- Charts Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-50/70 p-5 rounded-3xl border border-slate-200/60 shadow-inner">
-                        <h3 class="font-bold text-slate-900 mb-4 text-xs sm:text-sm flex items-center space-x-2">
-                            <i class="fa-solid fa-wave-square text-brand-600"></i> <span>ក្រាហ្វិកចំណូលតាមកាលបរិច្ឆេទ</span>
-                        </h3>
-                        <div class="relative h-60 sm:h-72">
-                            <canvas id="revenueChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50/70 p-5 rounded-3xl border border-slate-200/60 shadow-inner">
-                        <h3 class="font-bold text-slate-900 mb-4 text-xs sm:text-sm flex items-center space-x-2">
-                            <i class="fa-solid fa-chart-pie text-emerald-600"></i> <span>ចំណែកឯកតាទំនិញលក់ដាច់ជាងគេ</span>
-                        </h3>
-                        <div class="relative h-60 sm:h-72 flex justify-center">
-                            <canvas id="productsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Analytics Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-500 font-medium">តម្លៃមធ្យមក្នុងមួយការបញ្ជាទិញ (AOV)</p>
-                        <h3 id="analytics-avg-order-value" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">$0.00</h3>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">តម្រងតាមកាលបរិច្ឆេទ</label>
+                        <input type="date" id="filterDate" onchange="renderLogs()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
                     </div>
-                    <div class="bg-brand-50 text-brand-600 p-3 rounded-2xl">
-                        <i class="fa-solid fa-calculator text-lg"></i>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium">ទំនិញលក់ដាច់ជាងគេសរុប</p>
-                        <h3 id="analytics-top-product-name" class="text-sm sm:text-lg font-extrabold text-slate-900 mt-1 truncate max-w-[180px]">-</h3>
-                    </div>
-                    <div class="bg-emerald-50 text-emerald-600 p-3 rounded-2xl">
-                        <i class="fa-solid fa-fire-flame-curved text-lg"></i>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium">អត្រាបង់ប្រាក់រួច</p>
-                        <h3 id="analytics-payment-rate" class="text-xl sm:text-2xl font-extrabold text-emerald-600 mt-1">0%</h3>
-                    </div>
-                    <div class="bg-emerald-50 text-emerald-600 p-3 rounded-2xl">
-                        <i class="fa-solid fa-circle-check text-lg"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: ORDERS -->
-        <section id="tab-orders" class="tab-content space-y-6 admin-only hidden">
-            <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 id="order-form-title" class="text-lg sm:text-xl font-bold text-slate-900 flex items-center space-x-2.5">
-                        <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-cart-plus"></i></span>
-                        <span>បញ្ជាទិញថ្មី (Order)</span>
-                    </h2>
-                    <button type="button" id="cancel-edit-order-btn" onclick="resetOrderForm()" class="hidden text-xs px-3.5 py-1.5 bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 font-semibold transition">
-                        <i class="fa-solid fa-xmark mr-1"></i> បោះបង់
-                    </button>
-                </div>
-                
-                <form id="order-form" class="space-y-5">
-                    <input type="hidden" id="edit-order-id" value="">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-brand-500"></i> កាលបរិច្ឆេទ និង ម៉ោង *</label>
-                            <input type="datetime-local" id="order-datetime" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none bg-slate-50/50 text-sm font-medium">
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-brand-500"></i> ឈ្មោះអ្នកលក់ *</label>
-                            <select id="order-staff" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none bg-slate-50/50 text-sm font-medium cursor-pointer">
-                                <option value="">-- ជ្រើសរើសឈ្មោះបុគ្គលិក --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-user text-brand-500"></i> ឈ្មោះអតិថិជន *</label>
-                            <input type="text" id="order-customer" required placeholder="បញ្ចូលឈ្មោះអតិថិជន" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm font-medium bg-slate-50/50">
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-5">
-                        <div class="flex justify-between items-center mb-4">
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-basket-shopping text-brand-500"></i> បញ្ជីទំនិញ និងប្រភេទតម្លៃ</label>
-                            <button type="button" onclick="addProductRow()" class="px-3.5 py-2 bg-brand-50 text-brand-600 font-semibold text-xs rounded-xl hover:bg-brand-100 transition flex items-center space-x-1.5 shadow-sm">
-                                <i class="fa-solid fa-plus"></i> <span>បន្ថែមទំនិញ</span>
-                            </button>
-                        </div>
-                        <div id="product-rows-container" class="space-y-3"></div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-slate-100 pt-5">
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-file-invoice-dollar text-brand-500"></i> ស្ថានភាពបង់ប្រាក់ *</label>
-                            <select id="order-payment-status" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none bg-slate-50/50 text-sm font-medium cursor-pointer">
-                                <option value="បង់លុយរួច">បង់លុយរួច</option>
-                                <option value="មិនទាន់បង់លុយ">មិនទាន់បង់លុយ</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-brand-500"></i> វិធីសាស្ត្របង់ប្រាក់ *</label>
-                            <select id="order-payment-method" onchange="togglePaymentInput()" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none bg-slate-50/50 text-sm font-medium cursor-pointer">
-                                <option value="អោយលុយក្រៅ">សាច់ប្រាក់ផ្ទាល់</option>
-                                <option value="វិក្កយបត្រ">វិក្កយបត្រ (ABA/Scan QR)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="receipt-upload-container" class="hidden">
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-file-arrow-up text-brand-500"></i> បញ្ចូលរូបភាពវិក្កយបត្រ</label>
-                        <input type="file" id="order-receipt-file" accept="image/*" class="w-full px-4 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs sm:text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition cursor-pointer">
-                        <div id="receipt-preview-container" class="mt-2"></div>
-                    </div>
-
-                    <div class="bg-gradient-to-r from-brand-50 to-violet-50 border border-brand-100 p-5 rounded-2xl flex justify-between items-center shadow-sm">
-                        <span class="font-bold text-slate-900 text-base sm:text-lg flex items-center gap-2"><i class="fa-solid fa-calculator text-brand-600"></i> លុយសរុប (Total):</span>
-                        <span id="order-calculated-total" class="text-xl sm:text-3xl font-black text-brand-700 tracking-tight">$0.00</span>
-                    </div>
-
-                    <button type="submit" id="order-submit-btn" class="w-full py-3.5 bg-brand-600 text-white font-bold rounded-2xl shadow-md hover:bg-brand-500 transition flex items-center justify-center space-x-2 text-sm sm:text-base">
-                        <i class="fa-solid fa-floppy-disk"></i> <span>រក្សាទុកការបញ្ជាទិញ</span>
-                    </button>
-                </form>
-            </div>
-
-            <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
-                    <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-list-check"></i></span>
-                    <span>បញ្ជីការបញ្ជាទិញទាំងអស់</span>
-                </h2>
-                <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                    <table class="w-full text-left text-sm min-w-[700px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50/80 text-slate-600 text-xs sm:text-sm font-semibold">
-                                <th class="p-3.5 rounded-l-2xl">កាលបរិច្ឆេទ & ម៉ោង</th>
-                                <th class="p-3.5">អតិថិជន</th>
-                                <th class="p-3.5">អ្នកលក់</th>
-                                <th class="p-3.5">ទំនិញ និងបរិមាណ</th>
-                                <th class="p-3.5">លុយសរុប</th>
-                                <th class="p-3.5">ស្ថានភាព</th>
-                                <th class="p-3.5">បង់ប្រាក់</th>
-                                <th class="p-3.5 text-center admin-only rounded-r-2xl">សកម្មភាព</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orders-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: INVENTORY -->
-        <section id="tab-inventory" class="tab-content space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div id="inventory-form-wrapper" class="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-100 lg:col-span-1 h-fit hidden">
-                    <h2 id="inventory-form-title" class="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex items-center space-x-2.5">
-                        <span class="bg-brand-50 text-brand-600 p-2 rounded-xl"><i class="fa-solid fa-square-plus"></i></span>
-                        <span>បន្ថែមទំនិញថ្មីចូលស្តុក</span>
-                    </h2>
-                    <form id="inventory-form" class="space-y-4">
-                        <input type="hidden" id="inv-index" value="-1">
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1"><i class="fa-solid fa-tag text-brand-500"></i> ឈ្មោះទំនិញ *</label>
-                            <input type="text" id="inv-name" required placeholder="ឧ. ទូរស័ព្ទដៃ iPhone" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1"><i class="fa-solid fa-dollar-sign text-brand-500"></i> តម្លៃលក់រាយ ($) *</label>
-                            <input type="number" step="0.01" min="0" id="inv-retail-price" required placeholder="0.00" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1"><i class="fa-solid fa-tags text-brand-500"></i> តម្លៃបោះដុំ ($) *</label>
-                            <input type="number" step="0.01" min="0" id="inv-wholesale-price" required placeholder="0.00" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
-                        </div>
-                        <div>
-                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1"><i class="fa-solid fa-cubes text-brand-500"></i> ចំនួនក្នុងស្តុក *</label>
-                            <input type="number" min="0" id="inv-stock" required placeholder="0" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
-                        </div>
-                        <button type="submit" class="w-full py-3.5 bg-brand-600 text-white font-bold rounded-2xl shadow-md hover:bg-brand-500 transition text-sm">
-                            រក្សាទុកទំនិញ
-                        </button>
-                    </form>
-                </div>
-
-                <div id="inventory-table-wrapper" class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 lg:col-span-3">
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-5 flex items-center space-x-2.5">
-                        <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-boxes-stacked"></i></span>
-                        <span>បញ្ជីស្តុកទំនិញបច្ចុប្បន្ន</span>
-                    </h2>
-                    <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                        <table class="w-full text-left text-sm min-w-[500px]">
-                            <thead>
-                                <tr class="border-b border-slate-100 bg-slate-50/80 text-slate-600 text-xs sm:text-sm font-semibold">
-                                    <th class="p-3.5 rounded-l-2xl">ឈ្មោះទំនិញ</th>
-                                    <th class="p-3.5">តម្លៃរាយ</th>
-                                    <th class="p-3.5">តម្លៃបោះដុំ</th>
-                                    <th class="p-3.5">ស្តុកសល់</th>
-                                    <th class="p-3.5 text-center admin-only rounded-r-2xl">សកម្មភាព</th>
-                                </tr>
-                            </thead>
-                            <tbody id="inventory-tbody" class="divide-y divide-slate-50"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: STAFF MANAGEMENT & PERFORMANCE -->
-        <section id="tab-staff" class="tab-content space-y-6">
-            <div id="staff-form-wrapper" class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 id="staff-form-title" class="text-lg sm:text-xl font-bold text-slate-900 flex items-center space-x-2.5">
-                        <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-users-gear"></i></span>
-                        <span>គ្រប់គ្រងបញ្ជីបុគ្គលិក</span>
-                    </h2>
-                </div>
-                <form id="add-staff-direct-form" class="flex flex-col sm:flex-row gap-4 items-end">
-                    <input type="hidden" id="edit-staff-old-name" value="">
-                    <div class="flex-1 w-full">
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-user-plus text-brand-500"></i> ឈ្មោះបុគ្គលិក *</label>
-                        <input type="text" id="new-staff-name-input" required placeholder="បញ្ចូលឈ្មោះបុគ្គលិក" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
-                    </div>
-                    <div class="flex gap-2 w-full sm:w-auto">
-                        <button type="submit" id="staff-submit-btn" class="flex-1 sm:flex-none px-6 py-3 bg-brand-600 text-white font-bold rounded-2xl shadow hover:bg-brand-500 transition text-sm h-[48px]">
-                            បន្ថែមបុគ្គលិក
-                        </button>
-                        <button type="button" id="cancel-edit-staff-btn" onclick="resetStaffForm()" class="hidden px-5 py-3 bg-slate-100 text-slate-700 font-semibold rounded-2xl hover:bg-slate-200 text-sm h-[48px] transition">
-                            បោះបង់
+                    <div class="flex items-end">
+                        <button onclick="resetFilters()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2 rounded-xl text-sm transition-all flex items-center justify-center space-x-1 rtl:space-x-reverse">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            <span>កំណត់ឡើងវិញ</span>
                         </button>
                     </div>
-                </form>
-
-                <div class="mt-6 border-t border-slate-100 pt-5">
-                    <h3 class="text-xs sm:text-sm font-semibold text-slate-600 mb-3.5 flex items-center gap-2"><i class="fa-solid fa-address-book text-brand-500"></i> បញ្ជីឈ្មោះបុគ្គលិកបច្ចុប្បន្ន៖</h3>
-                    <div id="staff-chips-container" class="flex flex-wrap gap-2.5"></div>
                 </div>
             </div>
 
-            <div class="bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center space-x-2.5">
-                            <span class="bg-brand-50 text-brand-600 p-2.5 rounded-2xl"><i class="fa-solid fa-award"></i></span>
-                            <span>លទ្ធផលការលក់តាមបុគ្គលិក</span>
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-1">ការវិភាគបរិមាណលក់ និងទឹកប្រាក់សរុបរបស់បុគ្គលិកម្នាក់ៗយ៉ាងលម្អិត</p>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                    <table class="w-full text-left text-sm min-w-[650px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50/80 text-slate-600 text-xs sm:text-sm font-semibold">
-                                <th class="p-3.5 rounded-l-2xl">ចំណាត់ថ្នាក់</th>
-                                <th class="p-3.5">ឈ្មោះបុគ្គលិក</th>
-                                <th class="p-3.5">ចំនួនដងលក់</th>
-                                <th class="p-3.5">ទំនិញសរុប (Units)</th>
-                                <th class="p-3.5">ចំណូលសរុប</th>
-                                <th class="p-3.5 text-center">កម្រិតលក់</th>
-                                <th class="p-3.5 text-center rounded-r-2xl">សកម្មភាព</th>
-                            </tr>
-                        </thead>
-                        <tbody id="staff-performance-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
-                </div>
-            </div>
+            <div id="logsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- TAB 6: SETTINGS -->
-        <section id="tab-settings" class="tab-content space-y-6">
-            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+        <!-- ================= 2. INDIVIDUAL STAFF REVIEW TAB ================= -->
+        <section id="tab-individual" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center space-x-2.5">
-                        <span class="bg-rose-50 text-rose-600 p-2.5 rounded-2xl"><i class="fa-solid fa-gears"></i></span>
-                        <span>ការកំណត់ប្រព័ន្ធ (Settings & Configuration)</span>
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-1">គ្រប់គ្រងការកំណត់ទូទៅ ប្រធានបទពណ៌ ទិន្នន័យ និងសុវត្ថិភាពប្រព័ន្ធ</p>
+                    <h2 class="text-lg font-bold text-slate-900">ពិនិត្យប្រវត្តិ និងសកម្មភាពបុគ្គលិកម្នាក់ៗ</h2>
+                    <p class="text-sm text-slate-500">ជ្រើសរើសបុគ្គលិកដើម្បីមើលស្ថិតិ និងកំណត់ត្រាពី backup.json</p>
+                </div>
+                <div class="w-full md:w-72">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ជ្រើសរើសបុគ្គលិក</label>
+                    <select id="selectIndividualStaff" onchange="renderIndividualReport()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                        <option value="">-- ជ្រើសរើសបុគ្គលិក --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="individualReportContainer" class="space-y-6">
+                <div class="bg-white rounded-2xl p-12 text-center border border-slate-200 text-slate-400">
+                    <i data-lucide="user-search" class="mx-auto h-12 w-12 text-slate-300 mb-3"></i>
+                    <p class="text-sm">សូមជ្រើសរើសបុគ្គលិកពីប្រអប់ខាងលើ ដើម្បីបង្ហាញរបាយការណ៍លម្អិត</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. STAFF MANAGEMENT TAB ================= -->
+        <section id="tab-staff" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">បញ្ជីបុគ្គលិកប្រូម៉ូតទាំងអស់</h2>
+                    <p class="text-sm text-slate-500">ទិន្នន័យអានផ្ទាល់ពី backup.json</p>
+                </div>
+                <button onclick="openStaffModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm hover:shadow transition-all flex items-center space-x-2 rtl:space-x-reverse">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    <span>បន្ថែមបុគ្គលិកថ្មី</span>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                                <th class="py-3.5 px-6 font-semibold">កូដបុគ្គលិក</th>
+                                <th class="py-3.5 px-6 font-semibold">ឈ្មោះបុគ្គលិក</th>
+                                <th class="py-3.5 px-6 font-semibold">តួនាទី / ផលិតផល</th>
+                                <th class="py-3.5 px-6 font-semibold">លេខទូរស័ព្ទ</th>
+                                <th class="py-3.5 px-6 font-semibold text-right">សកម្មភាព</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. BACKUP INFO TAB ================= -->
+        <section id="tab-backup" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-2xl mx-auto space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-1">ព័ត៌មានទិន្នន័យ (JSON Sync)</h2>
+                    <p class="text-sm text-slate-500">ប្រព័ន្ធនេះកំពុងទាញយកទិន្នន័យដោយផ្ទាល់ពីឯកសារ <code>backup.json</code> ក្នុងថតរបស់អ្នកដោយស្វ័យប្រវត្តិ។</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-                    <!-- Theme Settings Card -->
-                    <div class="bg-slate-50 p-5 rounded-3xl border border-slate-200/60 space-y-3">
-                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-palette text-brand-600"></i> ជ្រើសរើសពណ៌ប្រធានបទ (Theme)
-                        </h3>
-                        <p class="text-xs text-slate-500">ប្តូរពណ៌ស្បែកនៃប្រព័ន្ធគ្រប់គ្រងតាមចំណង់ចំណូលចិត្តរបស់អ្នក។</p>
-                        <select id="settings-theme-selector" onchange="changeTheme(this.value); document.getElementById('theme-selector').value=this.value;" class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer shadow-sm">
-                            <option value="indigo">🌌 ពណ៌ខៀវទឹកមុជ (Indigo)</option>
-                            <option value="emerald">🌿 ពណ៌បៃតង (Emerald)</option>
-                            <option value="amber">🔥 ពណ៌ទឹកក្រូច (Amber)</option>
-                            <option value="rose">🌸 ពណ៌ផ្កាឈូក (Rose)</option>
-                        </select>
-                    </div>
-
-                    <!-- Data Backup & Sync Card -->
-                    <div class="bg-slate-50 p-5 rounded-3xl border border-slate-200/60 space-y-3">
-                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-arrow-down text-emerald-600"></i> ការគ្រប់គ្រងទិន្នន័យ (Backup & Sync)
-                        </h3>
-                        <p class="text-xs text-slate-500">ទាញយកឯកសារ Backup JSON ឬផ្ទុកទិន្នន័យឡើងវិញ។</p>
-                        <div class="flex flex-wrap gap-2 pt-1">
-                            <button onclick="downloadBackup()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow flex items-center space-x-1.5">
-                                <i class="fa-solid fa-download"></i> <span>ទាញយក Backup</span>
-                            </button>
-                            <button onclick="loadDataFromJsonFile()" class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs transition shadow flex items-center space-x-1.5">
-                                <i class="fa-solid fa-rotate"></i> <span>សមកាលកម្មទិន្នន័យ</span>
-                            </button>
+                <div class="p-6 bg-indigo-50 border border-indigo-100 rounded-2xl space-y-4">
+                    <div class="flex items-start space-x-3 rtl:space-x-reverse">
+                        <div class="bg-indigo-600 text-white p-2 rounded-xl mt-0.5">
+                            <i data-lucide="refresh-cw" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-indigo-900 text-base">ផ្ទុកទិន្នន័យឡើងវិញ (Reload Data)</h3>
+                            <p class="text-xs text-indigo-700 mt-0.5">ចុចទីនេះដើម្បីទាញយកទិន្នន័យថ្មីចុងក្រោយ បន្ទាប់ពីអ្នកបានកែប្រែឯកសារ backup.json។</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Admin Security & Data Wipe Section -->
-                <div class="p-5 rounded-3xl border border-rose-100 bg-rose-50/40 space-y-4">
-                    <h3 class="font-bold text-rose-900 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> តំបន់សុវត្ថិភាព និងការសម្អាតទិន្នន័យ (Admin Only)
-                    </h3>
-                    <p class="text-xs text-rose-700/80">សកម្មភាពខាងក្រោមទាមទារសិទ្ធិ Admin Mode ។ សូមប្រុងប្រយ័ត្នមុនពេលសម្រេចចិត្តសម្អាតទិន្នន័យទាំងអស់។</p>
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="resetAllSystemData()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition shadow flex items-center space-x-1.5 admin-only hidden">
-                            <i class="fa-solid fa-trash-arrow-up"></i> <span>សម្អាតទិន្នន័យទាំងអស់ (Reset Data)</span>
-                        </button>
-                        <span id="settings-admin-warning" class="text-xs text-slate-500 italic admin-only hidden self-center">⚠️ អ្នកកំពុងស្ថិតក្នុង Admin Mode ។</span>
-                        <span id="settings-view-warning" class="text-xs text-amber-700 font-semibold self-center">🔒 សូមចូល Admin Mode ដើម្បីអនុវត្តមុខងារកម្រិតខ្ពស់។</span>
-                    </div>
+                    <button onclick="loadDataFromJSON()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl shadow-sm transition-all flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span>អានទិន្នន័យពី backup.json ឡើងវិញ</span>
+                    </button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Modals -->
-    <div id="admin-login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-7 shadow-2xl space-y-5 border border-slate-100">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2.5">
-                    <span class="bg-brand-50 text-brand-600 p-2 rounded-xl"><i class="fa-solid fa-lock"></i></span>
-                    <span>ចូល Admin Mode</span>
-                </h3>
-                <button onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- ================= MODALS ================= -->
+    <div id="logModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+                <h3 id="logModalTitle" class="font-bold text-lg">ស្រង់សកម្មភាពបុគ្គលិកថ្មី</h3>
+                <button onclick="closeLogModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <form id="admin-login-form" onsubmit="verifyAdminPassword(event)" class="space-y-4">
+            <form id="logForm" onsubmit="saveLogLocally(event)" class="p-6 space-y-4">
                 <div>
-                    <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-key text-brand-500"></i> លេខសម្ងាត់ Admin *</label>
-                    <input type="password" id="admin-password-input" required placeholder="បញ្ចូលលេខសម្ងាត់" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm bg-slate-50/50">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ជ្រើសរើសបុគ្គលិក <span class="text-rose-500">*</span></label>
+                    <select id="logStaffId" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                        <option value="">-- ជ្រើសរើសបុគ្គលិក --</option>
+                    </select>
                 </div>
-                <div class="flex space-x-3 pt-2">
-                    <button type="submit" class="w-full py-3 bg-brand-600 text-white font-bold rounded-2xl shadow hover:bg-brand-500 transition text-sm">ចូល</button>
-                    <button type="button" onclick="closeAdminLoginModal()" class="w-full py-3 bg-slate-100 font-bold rounded-2xl text-slate-700 hover:bg-slate-200 transition text-sm">បោះបង់</button>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">កាលបរិច្ឆេទ និងម៉ោង <span class="text-rose-500">*</span></label>
+                    <input type="datetime-local" id="logDatetime" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ប្រភេទមេឌៀ (វីដេអូ ឬ រូបថត) <span class="text-rose-500">*</span></label>
+                    <input type="file" id="mediaFile" accept="image/*,video/*" required onchange="handleMediaPreview(event)" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                </div>
+                <div id="mediaPreviewContainer" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ការមើលជាមុន (Preview)</label>
+                    <div id="previewBox" class="rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-video flex items-center justify-center relative"></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">កំណត់ចំណាំ ឬសកម្មភាព</label>
+                    <textarea id="logNotes" rows="3" placeholder="សរសេរការពិពណ៌នាសកម្មភាព..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 rtl:space-x-reverse pt-2">
+                    <button type="button" onclick="closeLogModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-all">បោះបង់</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium shadow-sm transition-all">បន្ថែម (បង្ហាញក្នុង Session)</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="receipt-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5 text-center border border-slate-100">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2"><i class="fa-solid fa-receipt text-brand-600"></i> រូបភាពវិក្កយបត្រ (Receipt)</h3>
-                <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- Add/Edit Staff Modal -->
+    <div id="staffModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+                <h3 id="staffModalTitle" class="font-bold text-lg">បន្ថែមបុគ្គលិកថ្មី</h3>
+                <button onclick="closeStaffModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <div class="flex justify-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                <img id="modal-receipt-img" src="" alt="Receipt" class="max-h-80 sm:max-h-96 rounded-xl object-contain shadow-sm">
-            </div>
-            <button onclick="closeReceiptModal()" class="px-6 py-2.5 bg-slate-100 font-bold rounded-2xl text-slate-700 hover:bg-slate-200 transition text-sm">បិទ</button>
+            <form id="staffForm" onsubmit="saveStaffLocally(event)" class="p-6 space-y-4">
+                <input type="hidden" id="staffEditId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">កូដបុគ្គលិក <span class="text-rose-500">*</span></label>
+                    <input type="text" id="staffCode" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">ឈ្មោះពេញបុគ្គលិក <span class="text-rose-500">*</span></label>
+                    <input type="text" id="staffName" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">តួនាទី / ប្រូម៉ូតផលិតផល <span class="text-rose-500">*</span></label>
+                    <input type="text" id="staffRole" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">លេខទូរស័ព្ទ <span class="text-rose-500">*</span></label>
+                    <input type="text" id="staffPhone" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                </div>
+                <div class="flex justify-end space-x-3 rtl:space-x-reverse pt-2">
+                    <button type="button" onclick="closeStaffModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-all">បោះបង់</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium shadow-sm transition-all">រក្សាទុក</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div id="staff-detail-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto border border-slate-100">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <div class="flex items-center space-x-3.5">
-                    <div class="bg-brand-100 p-3 rounded-2xl text-brand-700 shadow-inner">
-                        <i class="fa-solid fa-user-tie text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 id="modal-staff-name" class="text-lg sm:text-xl font-bold text-slate-900">ឈ្មោះបុគ្គលិក</h3>
-                        <p class="text-xs text-slate-500 font-normal">ព័ត៌មានលម្អិត និងប្រវត្តិនៃការលក់ទំនិញ</p>
-                    </div>
-                </div>
-                <button onclick="closeStaffDetailModal()" class="text-slate-400 hover:text-slate-600 p-2"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <div class="bg-brand-50/70 p-4 rounded-2xl border border-brand-100">
-                    <p class="text-xs text-brand-600 font-medium">ការបញ្ជាទិញសរុប</p>
-                    <h4 id="modal-staff-orders-count" class="text-lg sm:text-xl font-black text-slate-900 mt-1">0 ដង</h4>
-                </div>
-                <div class="bg-blue-50/70 p-4 rounded-2xl border border-blue-100">
-                    <p class="text-xs text-blue-600 font-medium">ទំនិញលក់បានសរុប</p>
-                    <h4 id="modal-staff-units-count" class="text-lg sm:text-xl font-black text-blue-950 mt-1">0 ឯកតា</h4>
-                </div>
-                <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100">
-                    <p class="text-xs text-emerald-600 font-medium">ចំណូលបង្កើតបាន</p>
-                    <h4 id="modal-staff-revenue" class="text-lg sm:text-xl font-black text-emerald-950 mt-1">$0.00</h4>
-                </div>
-            </div>
-
-            <div>
-                <h4 class="font-bold text-slate-800 mb-3 text-xs sm:text-sm flex items-center space-x-2">
-                    <i class="fa-solid fa-file-lines text-brand-600"></i> <span>បញ្ជីការបញ្ជាទិញដែលបានលក់ដោយបុគ្គលិកនេះ</span>
-                </h4>
-                <div class="overflow-x-auto border border-slate-100 rounded-2xl">
-                    <table class="w-full text-left text-sm min-w-[500px]">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-slate-600 text-xs font-semibold">
-                                <th class="p-3">កាលបរិច្ឆេទ</th>
-                                <th class="p-3">អតិថិជន</th>
-                                <th class="p-3">ទំនិញ</th>
-                                <th class="p-3">ទឹកប្រាក់</th>
-                                <th class="p-3">ស្ថានភាព</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modal-staff-orders-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="flex justify-end pt-2">
-                <button onclick="closeStaffDetailModal()" class="px-6 py-2.5 bg-brand-600 text-white font-bold rounded-2xl hover:bg-brand-500 transition shadow text-sm">បិទ</button>
-            </div>
+    <!-- Media Full Viewer Modal -->
+    <div id="mediaViewerModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="closeMediaViewer()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button onclick="closeMediaViewer()" class="absolute -top-12 right-0 text-white hover:text-slate-300 bg-white/10 p-2 rounded-full backdrop-blur-sm transition-all">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div id="viewerContent" class="w-full flex items-center justify-center rounded-2xl overflow-hidden bg-black shadow-2xl"></div>
+            <div id="viewerControls" class="mt-4 flex items-center space-x-4 bg-slate-900/80 px-6 py-3 rounded-2xl border border-slate-800 text-white text-sm"></div>
         </div>
     </div>
 
-    <div id="custom-alert" class="fixed bottom-5 right-5 left-5 sm:left-auto bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl hidden z-50 transition-all duration-300 flex items-center space-x-3 text-sm border border-slate-800">
-        <i id="alert-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="alert-message">សារជូនដំណឹង</span>
-    </div>
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- ================= APP SCRIPT ================= -->
     <script>
-        let inventory = [];
-        let staffList = [];
-        let orders = [];
+        let db = {
+            staff: [],
+            logs: []
+        };
 
-        let revenueChartInstance = null;
-        let productsChartInstance = null;
-        const ADMIN_PASSWORD = "admin123";
+        let tempMediaData = { type: 'image', mediaUrl: '', thumbnail: '' };
 
-        function changeTheme(themeName) {
-            document.documentElement.setAttribute('data-theme', themeName);
-            localStorage.setItem('sys_app_theme', themeName);
-            let selector = document.getElementById('theme-selector');
-            let settingsSelector = document.getElementById('settings-theme-selector');
-            if (selector) selector.value = themeName;
-            if (settingsSelector) settingsSelector.value = themeName;
-        }
-
-        function loadThemeSetting() {
-            let savedTheme = localStorage.getItem('sys_app_theme') || 'indigo';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            let selector = document.getElementById('theme-selector');
-            let settingsSelector = document.getElementById('settings-theme-selector');
-            if (selector) selector.value = savedTheme;
-            if (settingsSelector) settingsSelector.value = savedTheme;
-        }
-
-        function isAdminMode() {
-            return sessionStorage.getItem('sys_admin_logged') === 'true';
-        }
-
-        function toggleMobileMenu() {
-            let menu = document.getElementById('navbar-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        function handleAuthAction() {
-            if (isAdminMode()) {
-                sessionStorage.removeItem('sys_admin_logged');
-                showAlert('បានចេញពី Admin Mode (បច្ចុប្បន្នជា View Mode)');
-                updateUIMode();
-                refreshActiveTab();
-            } else {
-                document.getElementById('admin-password-input').value = '';
-                document.getElementById('admin-login-modal').classList.remove('hidden');
-            }
-        }
-
-        function closeAdminLoginModal() {
-            document.getElementById('admin-login-modal').classList.add('hidden');
-        }
-
-        function verifyAdminPassword(e) {
-            e.preventDefault();
-            let pass = document.getElementById('admin-password-input').value;
-            if (pass === ADMIN_PASSWORD) {
-                sessionStorage.setItem('sys_admin_logged', 'true');
-                closeAdminLoginModal();
-                showAlert('បានចូល Admin Mode ដោយជោគជ័យ!');
-                updateUIMode();
-                refreshActiveTab();
-            } else {
-                showAlert('លេខសម្ងាត់មិនត្រឹមត្រូវ!', 'error');
-            }
-        }
-
-        function updateUIMode() {
-            let admin = isAdminMode();
-            let btn = document.getElementById('auth-btn');
-            let btnText = document.getElementById('auth-btn-text');
-
-            if (admin) {
-                btn.className = 'px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md flex items-center space-x-1.5 border border-rose-400/30';
-                btnText.textContent = 'ចេញ Admin';
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-                
-                let setViewWarning = document.getElementById('settings-view-warning');
-                if(setViewWarning) setViewWarning.classList.add('hidden');
-
-                let invFormWrapper = document.getElementById('inventory-form-wrapper');
-                if(invFormWrapper) invFormWrapper.classList.remove('hidden');
-                let invTableWrapper = document.getElementById('inventory-table-wrapper');
-                if(invTableWrapper) invTableWrapper.className = "bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 lg:col-span-2";
-                let staffFormWrapper = document.getElementById('staff-form-wrapper');
-                if(staffFormWrapper) staffFormWrapper.classList.remove('hidden');
-            } else {
-                btn.className = 'px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md flex items-center space-x-1.5 border border-brand-400/30';
-                btnText.textContent = 'Admin';
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-
-                let setViewWarning = document.getElementById('settings-view-warning');
-                if(setViewWarning) setViewWarning.classList.remove('hidden');
-
-                let activeSec = document.querySelector('.tab-content.active');
-                if (activeSec && activeSec.id === 'tab-orders') {
-                    switchTab('dashboard');
-                }
-
-                let invFormWrapper = document.getElementById('inventory-form-wrapper');
-                if(invFormWrapper) invFormWrapper.classList.add('hidden');
-                let invTableWrapper = document.getElementById('inventory-table-wrapper');
-                if(invTableWrapper) invTableWrapper.className = "bg-white p-5 sm:p-7 rounded-3xl shadow-sm border border-slate-100 lg:col-span-3";
-                let staffFormWrapper = document.getElementById('staff-form-wrapper');
-                if(staffFormWrapper) staffFormWrapper.classList.add('hidden');
-            }
-        }
-
-        function formatDateTimeLocal(dateObj) {
-            let year = dateObj.getFullYear();
-            let month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            let day = String(dateObj.getDate()).padStart(2, '0');
-            let hours = String(dateObj.getHours()).padStart(2, '0');
-            let minutes = String(dateObj.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-
-        async function loadDataFromJsonFile() {
+        // ទាញយកទិន្នន័យដោយផ្ទាល់ពី backup.json
+        async function loadDataFromJSON() {
             try {
-                const response = await fetch('./backup.json?_=' + new Date().getTime());
-                if (!response.ok) throw new Error('រកមិនឃើញឯកសារ backup.json ឡើយ');
+                const response = await fetch('backup.json?t=' + new Date().getTime()); // បន្ថែម timestamp ដើម្បីការពារ Browser Cache
+                if (!response.ok) {
+                    throw new Error('រកមិនឃើញឯកសារ backup.json ទេ');
+                }
                 const data = await response.json();
-                inventory = data.inventory || [];
-                staffList = data.staff || [];
-                orders = data.orders || [];
-                saveDataToLocalStorage();
-                refreshActiveTab();
-                showAlert('បានទាញយកទិន្នន័យពី backup.json ដោយជោគជ័យ!');
-            } catch (error) {
-                inventory = JSON.parse(localStorage.getItem('sys_inventory')) || [];
-                staffList = JSON.parse(localStorage.getItem('sys_staff')) || [];
-                orders = JSON.parse(localStorage.getItem('sys_orders')) || [];
-                refreshActiveTab();
-            }
-        }
-
-        function saveDataToLocalStorage() {
-            localStorage.setItem('sys_inventory', JSON.stringify(inventory));
-            localStorage.setItem('sys_staff', JSON.stringify(staffList));
-            localStorage.setItem('sys_orders', JSON.stringify(orders));
-        }
-
-        function saveData() { saveDataToLocalStorage(); }
-
-        function downloadBackup() {
-            const backupData = { inventory: inventory, staff: staffList, orders: orders };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `backup.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showAlert('បានទាញយក backup.json ដោយជោគជ័យ!');
-        }
-
-        function resetAllSystemData() {
-            if (!isAdminMode()) { showAlert('ត្រូវការសិទ្ធិ Admin Mode!', 'error'); return; }
-            if (confirm('⚠️ ប្រយ័ត្ន៖ ការសម្អាតនឹងលុបជម្រះទិន្នន័យស្តុក បុគ្គលិក និងការបញ្ជាទិញទាំងអស់! តើអ្នកប្រាកដទេ?')) {
-                inventory = [];
-                staffList = [];
-                orders = [];
-                saveDataToLocalStorage();
-                refreshActiveTab();
-                showAlert('បានសម្អាតទិន្នន័យទាំងអស់ដោយជោគជ័យ!');
-            }
-        }
-
-        function showAlert(msg, type = 'success') {
-            const alertBox = document.getElementById('custom-alert');
-            const alertMsg = document.getElementById('alert-message');
-            const alertIcon = document.getElementById('alert-icon');
-            alertMsg.textContent = msg;
-            alertIcon.className = type === 'success' ? 'fa-solid fa-circle-check text-emerald-400 text-lg' : 'fa-solid fa-triangle-exclamation text-amber-400 text-lg';
-            alertBox.classList.remove('hidden');
-            setTimeout(() => { alertBox.classList.add('hidden'); }, 3000);
-        }
-
-        function switchTab(tabId) {
-            if (tabId === 'orders' && !isAdminMode()) {
-                showAlert('ផ្នែកនេះសម្រាប់ Admin Mode ប៉ុណ្ណោះ!', 'error');
-                return;
-            }
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-
-            if (window.innerWidth < 768) {
-                document.getElementById('navbar-menu').classList.add('hidden');
-            }
-
-            ['dashboard', 'analytics', 'orders', 'inventory', 'staff', 'settings'].forEach(t => {
-                const btn = document.getElementById('btn-' + t);
-                if (btn) {
-                    btn.className = t === tabId 
-                        ? 'px-4 py-2.5 rounded-xl bg-brand-700 text-white font-semibold text-sm transition-all flex items-center space-x-2.5 shadow-md'
-                        : 'px-4 py-2.5 rounded-xl bg-brand-900/60 text-brand-200 font-medium text-sm transition-all hover:bg-brand-800/80 hover:text-white flex items-center space-x-2.5';
-                }
-            });
-            refreshActiveTab(tabId);
-        }
-
-        function refreshActiveTab(forcedTab = null) {
-            let activeTab = forcedTab || document.querySelector('.tab-content.active')?.id.replace('tab-', '') || 'dashboard';
-            if (activeTab === 'dashboard') renderDashboard();
-            if (activeTab === 'analytics') renderAnalyticsCharts();
-            if (activeTab === 'orders' && isAdminMode()) { 
-                renderOrderStaffDropdown(); 
-                if(!document.getElementById('edit-order-id').value) {
-                    renderProductRows(); 
-                    document.getElementById('order-datetime').value = formatDateTimeLocal(new Date());
-                } 
-                renderOrdersTable(); 
-            }
-            if (activeTab === 'inventory') renderInventoryTable();
-            if (activeTab === 'staff') { renderStaffChips(); renderStaffPerformance(); }
-            if (activeTab === 'settings') updateUIMode();
-        }
-
-        function onDashboardFilterTypeChange() {
-            let type = document.getElementById('dashboard-filter-type').value;
-            let container = document.getElementById('dashboard-filter-value-container');
-            let weekInput = document.getElementById('dashboard-week-input');
-            let monthInput = document.getElementById('dashboard-month-input');
-
-            weekInput.classList.add('hidden');
-            monthInput.classList.add('hidden');
-
-            if (type === 'all') {
-                container.classList.add('hidden');
-            } else {
-                container.classList.remove('hidden');
-                if (type === 'week') {
-                    weekInput.classList.remove('hidden');
-                } else if (type === 'month') {
-                    monthInput.classList.remove('hidden');
-                }
-            }
-            renderDashboard();
-        }
-
-        function getFilteredOrdersForDashboard() {
-            let type = document.getElementById('dashboard-filter-type').value;
-            if (type === 'all') return orders;
-
-            if (type === 'month') {
-                let monthVal = document.getElementById('dashboard-month-input').value;
-                if (!monthVal) return orders;
-                return orders.filter(o => o.date && o.date.startsWith(monthVal));
-            }
-
-            if (type === 'week') {
-                let weekVal = document.getElementById('dashboard-week-input').value;
-                if (!weekVal) return orders;
-                let [yearStr, weekStr] = weekVal.split('-W');
-                let year = parseInt(yearStr);
-                let week = parseInt(weekStr);
-
-                return orders.filter(o => {
-                    if (!o.date) return false;
-                    let orderDate = new Date(o.date.replace(' ', 'T'));
-                    let oYear = orderDate.getFullYear();
-                    if (oYear !== year) return false;
-                    
-                    let d = new Date(Date.UTC(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate()));
-                    let dayNum = d.getUTCDay() || 7;
-                    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-                    let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-                    let oWeek = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-                    
-                    return oWeek === week;
-                });
-            }
-            return orders;
-        }
-
-        function renderDashboard() {
-            let filteredOrders = getFilteredOrdersForDashboard();
-            let totalRevenue = filteredOrders.reduce((sum, o) => sum + o.total, 0);
-            let totalStockQty = inventory.reduce((sum, i) => sum + i.stock, 0);
-
-            document.getElementById('stat-total-revenue').textContent = '$' + totalRevenue.toFixed(2);
-            document.getElementById('stat-total-orders').textContent = filteredOrders.length;
-            document.getElementById('stat-total-stock').textContent = totalStockQty;
-            document.getElementById('stat-total-staff').textContent = staffList.length;
-
-            renderWeeklyRanking();
-            renderMonthlyRanking();
-
-            let recentTbody = document.getElementById('recent-orders-tbody');
-            recentTbody.innerHTML = '';
-            let recent = [...filteredOrders].reverse().slice(0, 5);
-            if (recent.length === 0) {
-                recentTbody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-slate-400 text-xs sm:text-sm">គ្មានទិន្នន័យ</td></tr>';
-            } else {
-                recent.forEach(o => {
-                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' 
-                        ? '<span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-check"></i> បង់រួច</span>' 
-                        : '<span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> មិនទាន់</span>';
-                    recentTbody.innerHTML += `
-                        <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                            <td class="py-3 font-semibold text-slate-700 truncate max-w-[100px]"><i class="fa-solid fa-user-circle text-slate-400 mr-1"></i> ${o.customer}</td>
-                            <td class="py-3 text-slate-600 truncate max-w-[80px]">${o.staff}</td>
-                            <td class="py-3 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
-                            <td class="py-3">${statusBadge}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            let dashboardOrdersTbody = document.getElementById('dashboard-orders-tbody');
-            dashboardOrdersTbody.innerHTML = '';
-            if (filteredOrders.length === 0) {
-                dashboardOrdersTbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-400">មិនទាន់មានការបញ្ជាទិញ</td></tr>';
-            } else {
-                [...filteredOrders].reverse().forEach(o => {
-                    let itemsStr = o.items.map(i => `${i.name} (${i.priceType === 'retailPrice' ? 'រាយ' : 'បោះ'} x${i.qty})`).join(', ');
-                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' 
-                        ? '<span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-check"></i> បង់រួច</span>' 
-                        : '<span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> មិនទាន់</span>';
-
-                    let paymentActionHtml = o.paymentMethod;
-                    if (o.receiptData) {
-                        paymentActionHtml += ` <button onclick="viewReceipt('${encodeURIComponent(o.receiptData)}')" class="text-brand-600 hover:text-brand-800 underline text-xs font-bold block mt-1"><i class="fa-solid fa-image"></i> មើលវិក្កយបត្រ</button>`;
-                    }
-
-                    dashboardOrdersTbody.innerHTML += `
-                        <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                            <td class="p-3.5 text-slate-500 font-medium">${o.date || '-'}</td>
-                            <td class="p-3.5 font-semibold text-slate-800">${o.customer}</td>
-                            <td class="p-3.5 text-slate-600">${o.staff}</td>
-                            <td class="p-3.5 text-slate-700 max-w-[150px] sm:max-w-xs truncate">${itemsStr}</td>
-                            <td class="p-3.5 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
-                            <td class="p-3.5">${statusBadge}</td>
-                            <td class="p-3.5 text-xs text-slate-600">${paymentActionHtml}</td>
-                        </tr>
-                    `;
-                });
-            }
-        }
-
-        function renderWeeklyRanking() {
-            let container = document.getElementById('weekly-ranking-container');
-            container.innerHTML = '';
-
-            let now = new Date();
-            let sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(now.getDate() - 7);
-
-            let map = {};
-            staffList.forEach(st => { map[st] = { name: st, totalRevenue: 0, orderCount: 0 }; });
-
-            orders.forEach(o => {
-                if (o.date) {
-                    let orderDate = new Date(o.date.replace(' ', 'T'));
-                    if (orderDate >= sevenDaysAgo && orderDate <= now) {
-                        if (!map[o.staff]) map[o.staff] = { name: o.staff, totalRevenue: 0, orderCount: 0 };
-                        map[o.staff].totalRevenue += o.total;
-                        map[o.staff].orderCount += 1;
-                    }
-                }
-            });
-
-            let ranked = Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
-            let top3 = ranked.slice(0, 3);
-
-            if (top3.every(s => s.totalRevenue === 0)) {
-                container.innerHTML = '<p class="text-xs sm:text-sm text-slate-400 py-4 text-center">មិនទាន់មានទិន្នន័យលក់ក្នុងសប្តាហ៍នេះទេ។</p>';
-                return;
-            }
-
-            top3.forEach((s, idx) => {
-                let badgeColor = idx === 0 ? 'bg-amber-50/80 text-amber-900 border-amber-200' : (idx === 1 ? 'bg-slate-50 text-slate-800 border-slate-200' : 'bg-orange-50/50 text-orange-900 border-orange-200');
-                let medalIcon = idx === 0 ? '<i class="fa-solid fa-medal text-amber-500 text-base"></i>' : (idx === 1 ? '<i class="fa-solid fa-medal text-slate-400 text-base"></i>' : '<i class="fa-solid fa-medal text-amber-700 text-base"></i>');
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl border ${badgeColor} transition hover:shadow-sm">
-                        <div class="flex items-center space-x-3">
-                            <span class="flex items-center justify-center w-8 h-8 rounded-xl bg-white shadow-sm">${medalIcon}</span>
-                            <div>
-                                <h4 class="font-bold text-sm">${s.name}</h4>
-                                <p class="text-[11px] text-slate-500">លក់បាន ${s.orderCount} ដង</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-base text-slate-900">$${s.totalRevenue.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function renderMonthlyRanking() {
-            let container = document.getElementById('monthly-ranking-container');
-            container.innerHTML = '';
-
-            let currentMonthStr = new Date().toISOString().slice(0, 7);
-            document.getElementById('current-month-label').textContent = `ខែ ${currentMonthStr}`;
-
-            let map = {};
-            staffList.forEach(st => { map[st] = { name: st, totalRevenue: 0, orderCount: 0 }; });
-
-            orders.forEach(o => {
-                if (o.date && o.date.startsWith(currentMonthStr)) {
-                    if (!map[o.staff]) map[o.staff] = { name: o.staff, totalRevenue: 0, orderCount: 0 };
-                    map[o.staff].totalRevenue += o.total;
-                    map[o.staff].orderCount += 1;
-                }
-            });
-
-            let ranked = Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
-            let top3 = ranked.slice(0, 3);
-
-            if (top3.every(s => s.totalRevenue === 0)) {
-                container.innerHTML = '<p class="text-xs sm:text-sm text-slate-400 py-4 text-center">មិនទាន់មានទិន្នន័យលក់ក្នុងខែនេះទេ។</p>';
-                return;
-            }
-
-            top3.forEach((s, idx) => {
-                let badgeColor = idx === 0 ? 'bg-brand-50/80 text-brand-900 border-brand-200' : (idx === 1 ? 'bg-slate-50 text-slate-800 border-slate-200' : 'bg-purple-50/50 text-purple-900 border-purple-200');
-                let trophyIcon = idx === 0 ? '<i class="fa-solid fa-trophy text-amber-500 text-base"></i>' : (idx === 1 ? '<i class="fa-solid fa-trophy text-slate-400 text-base"></i>' : '<i class="fa-solid fa-trophy text-amber-700 text-base"></i>');
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl border ${badgeColor} transition hover:shadow-sm">
-                        <div class="flex items-center space-x-3">
-                            <span class="flex items-center justify-center w-8 h-8 rounded-xl bg-white shadow-sm">${trophyIcon}</span>
-                            <div>
-                                <h4 class="font-bold text-sm">${s.name}</h4>
-                                <p class="text-[11px] text-slate-500">លក់បាន ${s.orderCount} ដង</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-base text-slate-900">$${s.totalRevenue.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function calculateStaffStats() {
-            let map = {};
-            staffList.forEach(st => { map[st] = { name: st, orderCount: 0, totalUnits: 0, totalRevenue: 0 }; });
-            orders.forEach(o => {
-                if (!map[o.staff]) map[o.staff] = { name: o.staff, orderCount: 0, totalUnits: 0, totalRevenue: 0 };
-                map[o.staff].orderCount += 1;
-                map[o.staff].totalRevenue += o.total;
-                o.items.forEach(i => { map[o.staff].totalUnits += i.qty; });
-            });
-            return Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
-        }
-
-        function renderAnalyticsCharts() {
-            let filterPeriod = document.getElementById('analytics-filter-period').value;
-            let filteredOrders = [...orders];
-
-            if (filterPeriod === 'month') {
-                let currentMonthStr = new Date().toISOString().slice(0, 7);
-                filteredOrders = orders.filter(o => o.date && o.date.startsWith(currentMonthStr));
-            }
-
-            let totalRev = filteredOrders.reduce((sum, o) => sum + o.total, 0);
-            let avgOrderVal = filteredOrders.length > 0 ? totalRev / filteredOrders.length : 0;
-            document.getElementById('analytics-avg-order-value').textContent = '$' + avgOrderVal.toFixed(2);
-
-            let paidCount = filteredOrders.filter(o => o.paymentStatus === 'បង់លុយរួច').length;
-            let paymentRate = filteredOrders.length > 0 ? (paidCount / filteredOrders.length) * 100 : 0;
-            document.getElementById('analytics-payment-rate').textContent = paymentRate.toFixed(1) + '%';
-
-            let productSalesMap = {};
-            filteredOrders.forEach(o => {
-                o.items.forEach(i => {
-                    if (!productSalesMap[i.name]) productSalesMap[i.name] = 0;
-                    productSalesMap[i.name] += i.qty;
-                });
-            });
-
-            let sortedProducts = Object.entries(productSalesMap).sort((a, b) => b[1] - a[1]);
-            if (sortedProducts.length > 0) {
-                document.getElementById('analytics-top-product-name').textContent = `${sortedProducts[0][0]} (${sortedProducts[0][1]} ឯកតា)`;
-            } else {
-                document.getElementById('analytics-top-product-name').textContent = '-';
-            }
-
-            let dateRevenueMap = {};
-            filteredOrders.forEach(o => {
-                let dateKey = o.date ? o.date.split(' ')[0] : 'មិនស្គាល់';
-                if (!dateRevenueMap[dateKey]) dateRevenueMap[dateKey] = 0;
-                dateRevenueMap[dateKey] += o.total;
-            });
-
-            let sortedDates = Object.keys(dateRevenueMap).sort();
-            let revenueDataVals = sortedDates.map(d => dateRevenueMap[d]);
-
-            if (revenueChartInstance) revenueChartInstance.destroy();
-            const ctxRev = document.getElementById('revenueChart').getContext('2d');
-            revenueChartInstance = new Chart(ctxRev, {
-                type: 'line',
-                data: {
-                    labels: sortedDates.length > 0 ? sortedDates : ['គ្មានទិន្នន័យ'],
-                    datasets: [{
-                        label: 'ចំណូលសរុប ($)',
-                        data: sortedDates.length > 0 ? revenueDataVals : [0],
-                        borderColor: '#4f46e5',
-                        backgroundColor: 'rgba(79, 70, 229, 0.08)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.35,
-                        pointBackgroundColor: '#4f46e5',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { 
-                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.03)' } },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            let topLabels = sortedProducts.slice(0, 5).map(p => p[0]);
-            let topValues = sortedProducts.slice(0, 5).map(p => p[1]);
-
-            if (productsChartInstance) productsChartInstance.destroy();
-            const ctxProd = document.getElementById('productsChart').getContext('2d');
-            productsChartInstance = new Chart(ctxProd, {
-                type: 'doughnut',
-                data: {
-                    labels: topLabels.length > 0 ? topLabels : ['គ្មានទិន្នន័យ'],
-                    datasets: [{
-                        data: topValues.length > 0 ? topValues : [1],
-                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Kantumruy Pro' } } } }
-                }
-            });
-        }
-
-        function renderOrderStaffDropdown() {
-            let select = document.getElementById('order-staff');
-            let currentVal = select.value;
-            select.innerHTML = '<option value="">-- ជ្រើសរើសឈ្មោះបុគ្គលិក --</option>';
-            staffList.forEach(st => { select.innerHTML += `<option value="${st}">${st}</option>`; });
-            if (currentVal) select.value = currentVal;
-        }
-
-        function addProductRow(selectedItemName = '', qty = 1, priceType = 'retailPrice') {
-            let container = document.getElementById('product-rows-container');
-            let rowId = 'prod-row-' + Date.now() + Math.floor(Math.random() * 1000);
-            
-            let optionsHtml = '<option value="">-- ជ្រើសរើសទំនិញ --</option>';
-            inventory.forEach(inv => {
-                let selected = inv.name === selectedItemName ? 'selected' : '';
-                optionsHtml += `<option value="${inv.name}" data-retail="${inv.retailPrice}" data-wholesale="${inv.wholesalePrice}" ${selected}>${inv.name} (រាយ:$${inv.retailPrice}|បោះ:$${inv.wholesalePrice})</option>`;
-            });
-
-            let div = document.createElement('div');
-            div.className = 'flex flex-col sm:flex-row items-center gap-2.5 bg-slate-50/70 p-3.5 rounded-2xl border border-slate-200/70 text-sm';
-            div.id = rowId;
-            div.innerHTML = `
-                <div class="flex-1 w-full">
-                    <select class="product-select w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-500" onchange="calculateOrderTotal()">
-                        ${optionsHtml}
-                    </select>
-                </div>
-                <div class="w-full sm:w-40">
-                    <select class="price-type-select w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-500" onchange="calculateOrderTotal()">
-                        <option value="retailPrice" ${priceType === 'retailPrice' ? 'selected' : ''}>តម្លៃរាយ</option>
-                        <option value="wholesalePrice" ${priceType === 'wholesalePrice' ? 'selected' : ''}>តម្លៃបោះដុំ</option>
-                    </select>
-                </div>
-                <div class="flex items-center justify-between w-full sm:w-32 gap-2">
-                    <input type="number" min="1" value="${qty}" class="product-qty w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium text-center" oninput="calculateOrderTotal()" placeholder="ចំនួន">
-                    <button type="button" onclick="document.getElementById('${rowId}').remove(); calculateOrderTotal();" class="text-rose-400 hover:text-rose-600 p-2 transition" title="លុបជួរនេះ">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(div);
-            calculateOrderTotal();
-        }
-
-        function calculateOrderTotal() {
-            let rows = document.querySelectorAll('#product-rows-container > div');
-            let grandTotal = 0;
-            rows.forEach(row => {
-                let select = row.querySelector('.product-select');
-                let priceTypeSelect = row.querySelector('.price-type-select');
-                let qtyInput = row.querySelector('.product-qty');
-                let selectedOption = select.options[select.selectedIndex];
-                if (selectedOption && selectedOption.value) {
-                    let priceType = priceTypeSelect.value;
-                    let price = parseFloat(selectedOption.getAttribute(`data-${priceType === 'retailPrice' ? 'retail' : 'wholesale'}`)) || 0;
-                    let qty = parseInt(qtyInput.value) || 0;
-                    grandTotal += price * qty;
-                }
-            });
-            document.getElementById('order-calculated-total').textContent = '$' + grandTotal.toFixed(2);
-        }
-
-        function togglePaymentInput() {
-            let method = document.getElementById('order-payment-method').value;
-            let uploadContainer = document.getElementById('receipt-upload-container');
-            if (method === 'វិក្កយបត្រ') {
-                uploadContainer.classList.remove('hidden');
-            } else {
-                uploadContainer.classList.add('hidden');
-                document.getElementById('order-receipt-file').value = '';
-                document.getElementById('receipt-preview-container').innerHTML = '';
-            }
-        }
-
-        document.getElementById('order-receipt-file').addEventListener('change', function(e) {
-            let file = e.target.files[0];
-            let previewContainer = document.getElementById('receipt-preview-container');
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(evt) {
-                    previewContainer.innerHTML = `
-                        <div class="relative inline-block mt-2">
-                            <img src="${evt.target.result}" class="h-20 sm:h-24 rounded-xl border border-slate-200 object-cover shadow-sm">
-                            <button type="button" onclick="clearReceiptFile()" class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center shadow hover:bg-rose-600 transition">×</button>
-                        </div>
-                    `;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function clearReceiptFile() {
-            document.getElementById('order-receipt-file').value = '';
-            document.getElementById('receipt-preview-container').innerHTML = '';
-        }
-
-        document.getElementById('order-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let editId = document.getElementById('edit-order-id').value;
-            let datetimeVal = document.getElementById('order-datetime').value;
-            let staff = document.getElementById('order-staff').value;
-            let customer = document.getElementById('order-customer').value;
-            let paymentStatus = document.getElementById('order-payment-status').value;
-            let paymentMethod = document.getElementById('order-payment-method').value;
-            let formattedDate = datetimeVal ? datetimeVal.replace('T', ' ') : new Date().toISOString().slice(0, 16).replace('T', ' ');
-
-            let rows = document.querySelectorAll('#product-rows-container > div');
-            if (rows.length === 0) { showAlert('សូមបញ្ចូលទំនិញយ៉ាងតិចមួយ។', 'error'); return; }
-
-            let orderItems = [];
-            let grandTotal = 0;
-            let stockError = false;
-
-            rows.forEach(row => {
-                let select = row.querySelector('.product-select');
-                let priceTypeSelect = row.querySelector('.price-type-select');
-                let qtyInput = row.querySelector('.product-qty');
-                let itemName = select.value;
-                let priceType = priceTypeSelect.value;
-                let qty = parseInt(qtyInput.value);
-
-                if (itemName && qty > 0) {
-                    let invItem = inventory.find(i => i.name === itemName);
-                    if (invItem) {
-                        let price = priceType === 'retailPrice' ? invItem.retailPrice : invItem.wholesalePrice;
-                        orderItems.push({ name: itemName, qty: qty, price: price, priceType: priceType });
-                        grandTotal += price * qty;
-                    }
-                }
-            });
-
-            if (orderItems.length === 0) { showAlert('សូមជ្រើសរើសទំនិញឱ្យបានត្រឹមត្រូវ។', 'error'); return; }
-
-            let receiptFileElem = document.getElementById('order-receipt-file');
-            const saveProcess = (imgData) => {
-                if (editId) {
-                    let oldOrderIdx = orders.findIndex(o => o.id === editId);
-                    if (oldOrderIdx !== -1) {
-                        let oldOrder = orders[oldOrderIdx];
-                        oldOrder.items.forEach(oldItem => {
-                            let inv = inventory.find(i => i.name === oldItem.name);
-                            if (inv) inv.stock += oldItem.qty;
-                        });
-
-                        for (let item of orderItems) {
-                            let invItem = inventory.find(i => i.name === item.name);
-                            if (invItem && invItem.stock < item.qty) {
-                                showAlert(`ទំនិញ "${item.name}" ក្នុងស្តុកមិនគ្រប់គ្រាន់ទេ!`, 'error');
-                                stockError = true;
-                                break;
-                            }
-                        }
-
-                        if (stockError) {
-                            oldOrder.items.forEach(oldItem => {
-                                let inv = inventory.find(i => i.name === oldItem.name);
-                                if (inv) inv.stock -= oldItem.qty;
-                            });
-                            return;
-                        }
-
-                        orderItems.forEach(item => {
-                            let invItem = inventory.find(i => i.name === item.name);
-                            if (invItem) invItem.stock -= item.qty;
-                        });
-
-                        oldOrder.date = formattedDate;
-                        oldOrder.staff = staff;
-                        oldOrder.customer = customer;
-                        oldOrder.items = orderItems;
-                        oldOrder.total = grandTotal;
-                        oldOrder.paymentStatus = paymentStatus;
-                        oldOrder.paymentMethod = paymentMethod;
-                        if (imgData) oldOrder.receiptData = imgData;
-                        showAlert('បានកែប្រែការបញ្ជាទិញជោគជ័យ!');
-                    }
-                } else {
-                    for (let item of orderItems) {
-                        let invItem = inventory.find(i => i.name === item.name);
-                        if (invItem && invItem.stock < item.qty) {
-                            showAlert(`ទំនិញ "${item.name}" ក្នុងស្តុកមិនគ្រប់គ្រាន់ទេ!`, 'error');
-                            stockError = true;
-                            break;
-                        }
-                    }
-                    if (stockError) return;
-
-                    orderItems.forEach(item => {
-                        let invItem = inventory.find(i => i.name === item.name);
-                        if (invItem) invItem.stock -= item.qty;
-                    });
-
-                    orders.push({
-                        id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
-                        date: formattedDate, staff, customer,
-                        items: orderItems, total: grandTotal,
-                        paymentStatus, paymentMethod, receiptData: imgData
-                    });
-                    showAlert('បានរក្សាទុកការបញ្ជាទិញជោគជ័យ!');
-                }
-
-                saveData();
-                resetOrderForm();
-                renderOrdersTable();
-            };
-
-            if (paymentMethod === 'វិក្កយបត្រ' && receiptFileElem.files && receiptFileElem.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(evt) { saveProcess(evt.target.result); }
-                reader.readAsDataURL(receiptFileElem.files[0]);
-            } else {
-                let existingImg = editId ? (orders.find(o => o.id === editId)?.receiptData || null) : null;
-                saveProcess(existingImg);
-            }
-        });
-
-        function editOrder(orderId) {
-            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីកែប្រែការបញ្ជាទិញ!', 'error'); return; }
-            let order = orders.find(o => o.id === orderId);
-            if (!order) return;
-
-            document.getElementById('edit-order-id').value = order.id;
-            document.getElementById('order-datetime').value = order.date ? order.date.replace(' ', 'T') : formatDateTimeLocal(new Date());
-            document.getElementById('order-staff').value = order.staff;
-            document.getElementById('order-customer').value = order.customer;
-            document.getElementById('order-payment-status').value = order.paymentStatus;
-            document.getElementById('order-payment-method').value = order.paymentMethod;
-            togglePaymentInput();
-
-            if (order.receiptData) {
-                document.getElementById('receipt-preview-container').innerHTML = `
-                    <div class="relative inline-block mt-2">
-                        <img src="${order.receiptData}" class="h-20 sm:h-24 rounded-xl border border-slate-200 object-cover shadow-sm">
-                        <span class="text-xs text-slate-500 block mt-1">វិក្កយបត្រមានស្រាប់</span>
-                    </div>
-                `;
-            }
-
-            let container = document.getElementById('product-rows-container');
-            container.innerHTML = '';
-            order.items.forEach(item => { addProductRow(item.name, item.qty, item.priceType); });
-
-            document.getElementById('order-form-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-brand-600"></i> <span>កែប្រែការបញ្ជាទិញ (${order.id})</span>`;
-            document.getElementById('cancel-edit-order-btn').classList.remove('hidden');
-            document.getElementById('order-submit-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>ធ្វើបច្ចុប្បន្នភាព</span>';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetOrderForm() {
-            document.getElementById('order-form').reset();
-            document.getElementById('edit-order-id').value = '';
-            document.getElementById('order-datetime').value = formatDateTimeLocal(new Date());
-            document.getElementById('receipt-preview-container').innerHTML = '';
-            document.getElementById('receipt-upload-container').classList.add('hidden');
-            document.getElementById('order-form-title').innerHTML = '<i class="fa-solid fa-circle-plus text-brand-600"></i> <span>បញ្ជាទិញថ្មី (Order)</span>';
-            document.getElementById('cancel-edit-order-btn').classList.add('hidden');
-            document.getElementById('order-submit-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>រក្សាទុកការបញ្ជាទិញ</span>';
-            renderProductRows();
-        }
-
-        function renderProductRows() {
-            document.getElementById('product-rows-container').innerHTML = '';
-            addProductRow();
-        }
-
-        function renderOrdersTable() {
-            let tbody = document.getElementById('orders-tbody');
-            tbody.innerHTML = '';
-            if (orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-slate-400">មិនទាន់មានការបញ្ជាទិញ</td></tr>';
-                return;
-            }
-            let admin = isAdminMode();
-            [...orders].reverse().forEach(o => {
-                let itemsStr = o.items.map(i => `${i.name} (${i.priceType === 'retailPrice' ? 'រាយ' : 'បោះ'} x${i.qty})`).join(', ');
-                let statusBadge = o.paymentStatus === 'បង់លុយរួច' 
-                    ? '<span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-check"></i> បង់រួច</span>' 
-                    : '<span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-full text-[10px] sm:text-xs font-semibold inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> មិនទាន់</span>';
-
-                let paymentActionHtml = o.paymentMethod;
-                if (o.receiptData) {
-                    paymentActionHtml += ` <button onclick="viewReceipt('${encodeURIComponent(o.receiptData)}')" class="text-brand-600 hover:text-brand-800 underline text-xs font-bold block mt-1"><i class="fa-solid fa-image"></i> មើលវិក្កយបត្រ</button>`;
-                }
-
-                let actionsHtml = admin ? `
-                    <td class="p-3.5 text-center space-x-1.5">
-                        <button onclick="editOrder('${o.id}')" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition" title="កែប្រែ"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteOrder('${o.id}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition" title="លុប"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                ` : '';
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                        <td class="p-3.5 text-slate-500 font-medium">${o.date || '-'}</td>
-                        <td class="p-3.5 font-semibold text-slate-800">${o.customer}</td>
-                        <td class="p-3.5 text-slate-600">${o.staff}</td>
-                        <td class="p-3.5 text-slate-700 max-w-[150px] sm:max-w-xs truncate">${itemsStr}</td>
-                        <td class="p-3.5 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
-                        <td class="p-3.5">${statusBadge}</td>
-                        <td class="p-3.5 text-xs text-slate-600">${paymentActionHtml}</td>
-                        ${actionsHtml}
-                    </tr>
-                `;
-            });
-        }
-
-        function viewReceipt(encodedImg) {
-            document.getElementById('modal-receipt-img').src = decodeURIComponent(encodedImg);
-            document.getElementById('receipt-modal').classList.remove('hidden');
-        }
-
-        function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
-
-        function deleteOrder(orderId) {
-            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីលុបការបញ្ជាទិញ!', 'error'); return; }
-            if (confirm('តើអ្នកពិតជាចង់លុបការបញ្ជាទិញនេះមែនទេ?')) {
-                let idx = orders.findIndex(o => o.id === orderId);
-                if (idx !== -1) {
-                    let ord = orders[idx];
-                    ord.items.forEach(item => {
-                        let inv = inventory.find(i => i.name === item.name);
-                        if (inv) inv.stock += item.qty;
-                    });
-                    orders.splice(idx, 1);
-                    saveData();
-                    renderOrdersTable();
-                    showAlert('បានលុបការបញ្ជាទិញជោគជ័យ!');
-                }
-            }
-        }
-
-        document.getElementById('inventory-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីបន្ថែម/កែប្រែស្តុក!', 'error'); return; }
-            let index = parseInt(document.getElementById('inv-index').value);
-            let name = document.getElementById('inv-name').value;
-            let retailPrice = parseFloat(document.getElementById('inv-retail-price').value);
-            let wholesalePrice = parseFloat(document.getElementById('inv-wholesale-price').value);
-            let stock = parseInt(document.getElementById('inv-stock').value);
-
-            if (index === -1) {
-                inventory.push({ id: Date.now(), name, retailPrice, wholesalePrice, stock });
-                showAlert('បានបន្ថែមទំនិញថ្មីចូលស្តុក!');
-            } else {
-                inventory[index].name = name;
-                inventory[index].retailPrice = retailPrice;
-                inventory[index].wholesalePrice = wholesalePrice;
-                inventory[index].stock = stock;
-                showAlert('បានកែប្រែព័ត៌មានទំនិញជោគជ័យ!');
-                document.getElementById('inv-index').value = '-1';
-                document.getElementById('inventory-form-title').innerHTML = '<i class="fa-solid fa-square-plus text-brand-600"></i> <span>បន្ថែមទំនិញថ្មីចូលស្តុក</span>';
-            }
-            document.getElementById('inventory-form').reset();
-            saveData();
-            renderInventoryTable();
-        });
-
-        function renderInventoryTable() {
-            let tbody = document.getElementById('inventory-tbody');
-            tbody.innerHTML = '';
-            if (inventory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-400">មិនទាន់មានទំនិញក្នុងស្តុក</td></tr>';
-                return;
-            }
-            let admin = isAdminMode();
-            inventory.forEach((inv, idx) => {
-                let stockBadge = inv.stock <= 5 
-                    ? `<span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-lg text-xs font-bold inline-flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> ${inv.stock} (ជិតអស់)</span>`
-                    : `<span class="font-bold text-slate-700">${inv.stock}</span>`;
-
-                let actionsHtml = admin ? `
-                    <td class="p-3.5 text-center space-x-1.5">
-                        <button onclick="editInventory(${idx})" class="text-brand-600 hover:text-brand-800 p-1.5 rounded-lg hover:bg-brand-50 transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteInventory(${idx})" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                ` : '';
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                        <td class="p-3.5 font-semibold text-slate-800">${inv.name}</td>
-                        <td class="p-3.5 text-brand-600 font-bold">$${(inv.retailPrice || 0).toFixed(2)}</td>
-                        <td class="p-3.5 text-emerald-600 font-bold">$${(inv.wholesalePrice || 0).toFixed(2)}</td>
-                        <td class="p-3.5">${stockBadge}</td>
-                        ${actionsHtml}
-                    </tr>
-                `;
-            });
-        }
-
-        function editInventory(idx) {
-            if (!isAdminMode()) return;
-            let inv = inventory[idx];
-            document.getElementById('inv-index').value = idx;
-            document.getElementById('inv-name').value = inv.name;
-            document.getElementById('inv-retail-price').value = inv.retailPrice || 0;
-            document.getElementById('inv-wholesale-price').value = inv.wholesalePrice || 0;
-            document.getElementById('inv-stock').value = inv.stock;
-            document.getElementById('inventory-form-title').innerHTML = '<i class="fa-solid fa-pen-to-square text-brand-600"></i> <span>កែប្រែព័ត៌មានទំនិញ</span>';
-        }
-
-        function deleteInventory(idx) {
-            if (!isAdminMode()) return;
-            if (confirm('តើអ្នកពិតជាចង់លុបទំនិញនេះចេញពីស្តុកមែនទេ?')) {
-                inventory.splice(idx, 1);
-                saveData();
-                renderInventoryTable();
-                showAlert('បានលុបទំនិញជោគជ័យ!');
-            }
-        }
-
-        document.getElementById('add-staff-direct-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីគ្រប់គ្រងបុគ្គលិក!', 'error'); return; }
-            let nameInput = document.getElementById('new-staff-name-input');
-            let oldNameInput = document.getElementById('edit-staff-old-name');
-            let newName = nameInput.value.trim();
-            let oldName = oldNameInput.value;
-
-            if (!newName) return;
-
-            if (oldName === '') {
-                if (staffList.includes(newName)) {
-                    showAlert('ឈ្មោះបុគ្គលិកនេះមានរួចហើយ!', 'error');
-                } else {
-                    staffList.push(newName);
-                    saveData();
-                    showAlert('បានបន្ថែមបុគ្គលិកថ្មីជោគជ័យ!');
-                    nameInput.value = '';
-                    renderStaffChips();
-                    renderStaffPerformance();
-                }
-            } else {
-                if (newName !== oldName && staffList.includes(newName)) {
-                    showAlert('ឈ្មោះបុគ្គលិកថ្មីនេះមានរួចហើយ!', 'error');
-                    return;
-                }
-                let idx = staffList.indexOf(oldName);
-                if (idx !== -1) staffList[idx] = newName;
-                orders.forEach(o => { if (o.staff === oldName) o.staff = newName; });
-                saveData();
-                showAlert('បានកែប្រែឈ្មោះបុគ្គលិកជោគជ័យ!');
-                resetStaffForm();
-                renderStaffChips();
-                renderStaffPerformance();
-            }
-        });
-
-        function editStaff(staffName) {
-            if (!isAdminMode()) return;
-            document.getElementById('new-staff-name-input').value = staffName;
-            document.getElementById('edit-staff-old-name').value = staffName;
-            document.getElementById('staff-form-title').innerHTML = `<i class="fa-solid fa-user-pen text-brand-600"></i> <span>កែប្រែឈ្មោះបុគ្គលិក (${staffName})</span>`;
-            document.getElementById('staff-submit-btn').textContent = 'ធ្វើបច្ចុប្បន្នភាព';
-            document.getElementById('cancel-edit-staff-btn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetStaffForm() {
-            document.getElementById('add-staff-direct-form').reset();
-            document.getElementById('edit-staff-old-name').value = '';
-            document.getElementById('staff-form-title').innerHTML = `<i class="fa-solid fa-users-gear text-brand-600"></i> <span>គ្រប់គ្រងបញ្ជីបុគ្គលិក</span>`;
-            document.getElementById('staff-submit-btn').textContent = 'បន្ថែមបុគ្គលិក';
-            document.getElementById('cancel-edit-staff-btn').classList.add('hidden');
-        }
-
-        function deleteStaff(staffName) {
-            if (!isAdminMode()) { showAlert('សូមចូល Admin Mode ដើម្បីលុបបុគ្គលិក!', 'error'); return; }
-            if (confirm(`តើអ្នកពិតជាចង់លុបបុគ្គលិក "${staffName}" មែនទេ?`)) {
-                staffList = staffList.filter(s => s !== staffName);
-                saveData();
-                renderStaffChips();
-                renderStaffPerformance();
-                showAlert('បានលុបបុគ្គលិកជោគជ័យ!');
-            }
-        }
-
-        function renderStaffChips() {
-            let container = document.getElementById('staff-chips-container');
-            container.innerHTML = '';
-            if (staffList.length === 0) {
-                container.innerHTML = '<span class="text-xs text-slate-400 italic">មិនទាន់មានបុគ្គលិក</span>';
-                return;
-            }
-            let admin = isAdminMode();
-            staffList.forEach(st => {
-                let adminActions = admin ? `
-                    <button onclick="editStaff('${st}')" class="text-brand-600 hover:text-brand-800 ml-1.5 transition" title="កែប្រែ"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                    <button onclick="deleteStaff('${st}')" class="text-rose-500 hover:text-rose-700 ml-1 transition" title="លុប"><i class="fa-solid fa-xmark text-xs"></i></button>
-                ` : '';
-                container.innerHTML += `
-                    <div class="inline-flex items-center bg-brand-50/80 text-brand-900 border border-brand-100 px-3 py-1.5 rounded-2xl text-xs sm:text-sm font-semibold shadow-sm">
-                        <i class="fa-solid fa-user-circle mr-1.5 text-brand-600"></i> ${st}
-                        ${adminActions}
-                    </div>
-                `;
-            });
-        }
-
-        function renderStaffPerformance() {
-            let stats = calculateStaffStats();
-            let tbody = document.getElementById('staff-performance-tbody');
-            tbody.innerHTML = '';
-            if (stats.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-400">មិនទាន់មានទិន្នន័យបុគ្គលិក</td></tr>';
-                return;
-            }
-            stats.forEach((st, idx) => {
-                let rankBadge = idx === 0 ? '<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-bold text-xs"><i class="fa-solid fa-crown text-amber-500 mr-1"></i> លេខ ១</span>' : (idx === 1 ? '<span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-full font-bold text-xs">លេខ ២</span>' : (idx === 2 ? '<span class="px-2.5 py-1 bg-orange-50 text-orange-800 rounded-full font-bold text-xs">លេខ ៣</span>' : `<span class="text-slate-500 font-semibold text-xs">លេខ ${idx + 1}</span>`));
+                db.staff = data.staff || [];
+                db.logs = data.logs || [];
                 
-                let gradeBadge = '';
-                if (st.totalRevenue >= 500) gradeBadge = '<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold">🌟 ឆ្នើមខ្លាំង</span>';
-                else if (st.totalRevenue >= 200) gradeBadge = '<span class="px-2 py-0.5 bg-brand-50 text-brand-700 rounded-lg text-xs font-bold">👍 ល្អប្រសើរ</span>';
-                else gradeBadge = '<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold">ធម្មតា</span>';
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50/50 transition text-xs sm:text-sm">
-                        <td class="p-3.5">${rankBadge}</td>
-                        <td class="p-3.5 font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-user-tie text-brand-500"></i> ${st.name}</td>
-                        <td class="p-3.5 text-slate-600 font-semibold">${st.orderCount} ដង</td>
-                        <td class="p-3.5 text-slate-600 font-semibold">${st.totalUnits} ឯកតា</td>
-                        <td class="p-3.5 font-black text-brand-600">$${st.totalRevenue.toFixed(2)}</td>
-                        <td class="p-3.5 text-center">${gradeBadge}</td>
-                        <td class="p-3.5 text-center">
-                            <button onclick="openStaffDetailModal('${st.name}')" class="px-3 py-1.5 bg-brand-50 text-brand-600 hover:bg-brand-100 rounded-xl text-xs font-bold transition shadow-sm"><i class="fa-solid fa-eye mr-1"></i> មើលលម្អិត</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function openStaffDetailModal(staffName) {
-            let stOrders = orders.filter(o => o.staff === staffName);
-            let totalRev = stOrders.reduce((sum, o) => sum + o.total, 0);
-            let totalUnits = 0;
-            stOrders.forEach(o => o.items.forEach(i => totalUnits += i.qty));
-
-            document.getElementById('modal-staff-name').textContent = staffName;
-            document.getElementById('modal-staff-orders-count').textContent = stOrders.length + ' ដង';
-            document.getElementById('modal-staff-units-count').textContent = totalUnits + ' ឯកតា';
-            document.getElementById('modal-staff-revenue').textContent = '$' + totalRev.toFixed(2);
-
-            let tbody = document.getElementById('modal-staff-orders-tbody');
-            tbody.innerHTML = '';
-            if (stOrders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">បុគ្គលិកនេះមិនទាន់មានប្រវត្តិនៃការលក់ទេ។</td></tr>';
-            } else {
-                [...stOrders].reverse().forEach(o => {
-                    let itemsStr = o.items.map(i => `${i.name} (x${i.qty})`).join(', ');
-                    let statusBadge = o.paymentStatus === 'បង់លុយរួច' ? '<span class="text-emerald-600 font-bold">បង់រួច</span>' : '<span class="text-rose-600 font-bold">មិនទាន់</span>';
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50/50 text-xs">
-                            <td class="p-3 text-slate-500">${o.date || '-'}</td>
-                            <td class="p-3 font-semibold text-slate-800">${o.customer}</td>
-                            <td class="p-3 text-slate-600 truncate max-w-[150px]">${itemsStr}</td>
-                            <td class="p-3 font-bold text-brand-600">$${o.total.toFixed(2)}</td>
-                            <td class="p-3">${statusBadge}</td>
-                        </tr>
-                    `;
-                });
+                populateStaffDropdowns();
+                renderLogs();
+                renderStaffTable();
+                showToast('បានអានទិន្នន័យពី backup.json ដោយជោគជ័យ!');
+            } catch (error) {
+                console.error(error);
+                showToast('មិនអាចអាន backup.json បានទេ! (សូមប្រើប្រាស់ Local Server ដូចជា VS Code Live Server)', 'error');
             }
-            document.getElementById('staff-detail-modal').classList.remove('hidden');
-        }
-
-        function closeStaffDetailModal() {
-            document.getElementById('staff-detail-modal').classList.add('hidden');
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            loadThemeSetting();
-            await loadDataFromJsonFile();
-            if (staffList.length === 0 && inventory.length === 0 && orders.length === 0) {
-                staffList = ['សុខ ចាន់ឌី', 'ហុង វិសាល', 'គឹម សុភា'];
-                inventory = [
-                    { id: 1, name: 'iPhone 15 Pro Max', retailPrice: 1200, wholesalePrice: 1100, stock: 15 },
-                    { id: 2, name: 'Samsung Galaxy S24 Ultra', retailPrice: 1100, wholesalePrice: 1000, stock: 10 },
-                    { id: 3, name: 'AirPods Pro 2', retailPrice: 250, wholesalePrice: 220, stock: 30 }
-                ];
-                orders = [
-                    {
-                        id: 'ORD-1001',
-                        date: '2026-08-10 10:30',
-                        staff: 'សុខ ចាន់ឌី',
-                        customer: 'លោក ដារ៉ា',
-                        items: [{ name: 'iPhone 15 Pro Max', qty: 1, price: 1200, priceType: 'retailPrice' }],
-                        total: 1200,
-                        paymentStatus: 'បង់លុយរួច',
-                        paymentMethod: 'សាច់ប្រាក់ផ្ទាល់',
-                        receiptData: null
-                    }
-                ];
-                saveDataToLocalStorage();
-            }
-            renderStaffChips();
-            renderStaffPerformance();
-            renderInventoryTable();
-            renderOrdersTable();
-            renderDashboard();
-            renderAnalyticsCharts();
-            updateUIMode();
+            await loadDataFromJSON();
+            lucide.createIcons();
+            switchTab('logs');
         });
+
+        function switchTab(tabName) {
+            ['logs', 'individual', 'staff', 'backup'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabName) {
+                    el.classList.remove('hidden');
+                    btn.className = "flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white text-indigo-700 shadow-sm whitespace-nowrap";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg text-sm font-medium transition-all text-indigo-100 hover:text-white hover:bg-indigo-700/50 whitespace-nowrap";
+                }
+            });
+            if (tabName === 'logs') renderLogs();
+            if (tabName === 'individual') populateIndividualDropdown();
+            if (tabName === 'staff') renderStaffTable();
+            lucide.createIcons();
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-2xl shadow-lg text-sm font-medium pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 flex items-center space-x-2 rtl:space-x-reverse`;
+            
+            const iconName = type === 'success' ? 'check-circle' : 'alert-circle';
+            toast.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function handleMediaPreview(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const previewContainer = document.getElementById('mediaPreviewContainer');
+            const previewBox = document.getElementById('previewBox');
+            previewContainer.classList.remove('hidden');
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                tempMediaData.mediaUrl = e.target.result;
+                tempMediaData.thumbnail = e.target.result;
+                if (file.type.startsWith('video')) {
+                    tempMediaData.type = 'video';
+                    previewBox.innerHTML = `<video src="${e.target.result}" class="w-full h-full object-cover" controls></video>`;
+                } else {
+                    tempMediaData.type = 'image';
+                    previewBox.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openAddLogModal() {
+            populateStaffDropdowns();
+            document.getElementById('logForm').reset();
+            document.getElementById('mediaPreviewContainer').classList.add('hidden');
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('logDatetime').value = now.toISOString().slice(0, 16);
+            document.getElementById('logModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeLogModal() {
+            document.getElementById('logModal').classList.add('hidden');
+        }
+
+        function saveLogLocally(e) {
+            e.preventDefault();
+            const staffId = document.getElementById('logStaffId').value;
+            const datetime = document.getElementById('logDatetime').value;
+            const notes = document.getElementById('logNotes').value;
+
+            const newLog = {
+                id: 'LOG_' + Date.now(),
+                staffId,
+                datetime,
+                mediaType: tempMediaData.type,
+                mediaUrl: tempMediaData.mediaUrl,
+                thumbnail: tempMediaData.thumbnail,
+                notes
+            };
+
+            db.logs.unshift(newLog);
+            closeLogModal();
+            renderLogs();
+            showToast('បានបន្ថែមក្នុងទម្រង់បង្ហាញបណ្ដោះអាសន្ន! (សូមកែសម្រួល backup.json ផ្ទាល់បើចង់រក្សាទុកអចិន្ត្រៃយ៍)');
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logsContainer');
+            const filterStaffId = document.getElementById('filterStaff').value;
+            const filterDateVal = document.getElementById('filterDate').value;
+
+            let filtered = db.logs.filter(log => {
+                let matchStaff = !filterStaffId || log.staffId === filterStaffId;
+                let matchDate = !filterDateVal || log.datetime.startsWith(filterDateVal);
+                return matchStaff && matchDate;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-slate-200 text-slate-400">
+                        <i data-lucide="clipboard-x" class="mx-auto h-12 w-12 text-slate-300 mb-3"></i>
+                        <p class="text-sm">មិនទាន់មានទិន្នន័យសកម្មភាពក្នុង backup.json ទេ។</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(log => {
+                const staff = db.staff.find(s => s.id === log.staffId) || { name: 'បុគ្គលិកមិនស្គាល់', code: 'N/A', role: '' };
+                const formattedDate = new Date(log.datetime).toLocaleString('km-KH', {
+                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                let mediaBox = log.mediaType === 'video' ? `
+                    <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-video flex items-center justify-center cursor-pointer group" onclick="openMediaViewer('video', '${log.mediaUrl}')">
+                        <img src="${log.thumbnail || log.mediaUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-indigo-600 shadow-md">
+                                <i data-lucide="play" class="w-6 h-6 fill-indigo-600 ml-0.5"></i>
+                            </div>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="relative bg-slate-100 rounded-xl overflow-hidden aspect-video flex items-center justify-center cursor-pointer group" onclick="openMediaViewer('image', '${log.mediaUrl}')">
+                        <img src="${log.mediaUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                `;
+
+                return `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between p-4 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                                <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl font-bold flex items-center justify-center text-sm border border-indigo-100">
+                                    ${staff.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">${staff.name}</h4>
+                                    <span class="text-xs text-indigo-600 font-semibold">[${staff.code}] ${staff.role}</span>
+                                </div>
+                            </div>
+                        </div>
+                        ${mediaBox}
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-1.5 text-xs text-slate-500">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-500"></i>
+                                <span>${formattedDate}</span>
+                            </div>
+                            ${log.notes ? `<p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 italic">"${log.notes}"</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function resetFilters() {
+            document.getElementById('filterStaff').value = '';
+            document.getElementById('filterDate').value = '';
+            renderLogs();
+        }
+
+        function openMediaViewer(type, url) {
+            const modal = document.getElementById('mediaViewerModal');
+            const content = document.getElementById('viewerContent');
+            const controls = document.getElementById('viewerControls');
+
+            if (type === 'video') {
+                content.innerHTML = `<video id="activeVideoPlayer" src="${url}" class="max-h-[75vh] w-auto rounded-xl" controls autoplay></video>`;
+                controls.innerHTML = `<span class="text-xs font-semibold text-slate-400">វីដេអូពី backup.json</span>`;
+                controls.classList.remove('hidden');
+            } else {
+                content.innerHTML = `<img src="${url}" class="max-h-[80vh] max-w-full object-contain rounded-xl">`;
+                controls.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeMediaViewer() {
+            document.getElementById('mediaViewerModal').classList.add('hidden');
+        }
+
+        function populateIndividualDropdown() {
+            populateStaffDropdowns();
+            renderIndividualReport();
+        }
+
+        function renderIndividualReport() {
+            const staffId = document.getElementById('selectIndividualStaff').value;
+            const container = document.getElementById('individualReportContainer');
+
+            if (!staffId) {
+                container.innerHTML = `<div class="bg-white rounded-2xl p-12 text-center border border-slate-200 text-slate-400"><p class="text-sm">សូមជ្រើសរើសបុគ្គលិក</p></div>`;
+                return;
+            }
+
+            const staff = db.staff.find(s => s.id === staffId);
+            if (!staff) return;
+            const staffLogs = db.logs.filter(l => l.staffId === staffId);
+
+            container.innerHTML = `
+                <div class="bg-indigo-700 text-white rounded-2xl p-6 shadow-md flex justify-between items-center">
+                    <div>
+                        <span class="bg-white/20 text-indigo-100 text-xs px-2.5 py-1 rounded-lg">${staff.code}</span>
+                        <h3 class="text-xl font-bold mt-1">${staff.name}</h3>
+                        <p class="text-xs text-indigo-200">${staff.role} | ទូរស័ព្ទ: ${staff.phone}</p>
+                    </div>
+                    <div class="bg-indigo-900/60 rounded-xl px-4 py-2.5 text-center">
+                        <span class="block text-xs text-indigo-300">សកម្មភាពសរុប</span>
+                        <span class="text-lg font-bold">${staffLogs.length}</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderStaffTable() {
+            const tbody = document.getElementById('staffTableBody');
+            if (db.staff.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">មិនមានទិន្នន័យបុគ្គលិកក្នុង backup.json ទេ។</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = db.staff.map(staff => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-4 px-6 font-semibold text-indigo-600">${staff.code}</td>
+                    <td class="py-4 px-6 font-bold text-slate-900">${staff.name}</td>
+                    <td class="py-4 px-6 text-slate-600">${staff.role}</td>
+                    <td class="py-4 px-6 text-slate-600">${staff.phone}</td>
+                    <td class="py-4 px-6 text-right">អានពី JSON</td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function populateStaffDropdowns() {
+            ['filterStaff', 'logStaffId', 'selectIndividualStaff'].forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                let html = `<option value="">-- ជ្រើសរើសបុគ្គលិក --</option>`;
+                db.staff.forEach(s => {
+                    html += `<option value="${s.id}">[${s.code}] ${s.name} (${s.role})</option>`;
+                });
+                select.innerHTML = html;
+            });
+        }
     </script>
 </body>
 </html>
